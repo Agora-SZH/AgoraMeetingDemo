@@ -1,0 +1,148 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.6 (swiftlang-5.6.0.323.62 clang-1316.0.20.8)
+// swift-module-flags: -target arm64-apple-ios11.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name FcrUIScene
+import AVFoundation
+import AVKit
+import AgoraFoundation
+import AgoraRte
+import AgoraUIFoundation
+import FcrCore
+@_exported import FcrUIScene
+import Foundation
+import Masonry
+import SSZipArchive
+import Swift
+import UIKit
+import _Concurrency
+final public class FcrUICloudRecordingViewState {
+  final public var isExpanded: Swift.Bool? {
+    get
+    set
+  }
+  final public var recordingState: FcrCore.FcrRecordingState? {
+    get
+    set
+  }
+  final public var closure: ((FcrCore.FcrRecordingState, Swift.Bool) -> Swift.Void)?
+  public init()
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @objc @_Concurrency.MainActor(unsafe) public class FcrUIDefaultScene : FcrUIScene.FcrUIBaseScene {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func loadView()
+  @_Concurrency.MainActor(unsafe) @objc override public func initViews()
+  @_Concurrency.MainActor(unsafe) @objc override public func initViewFrame()
+  @_Concurrency.MainActor(unsafe) @objc override public func onViewOrientationUpdated(_ orientation: AgoraUIFoundation.AgoraUIOrientation)
+  @objc deinit
+}
+@objc public enum FcrUINetworkQuality : Swift.Int {
+  case good = 0
+  case medium = 1
+  case bad = 2
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public enum LeavingAction : Swift.String {
+  case leave
+  case close
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct FcrUIMemberActionSectionData {
+}
+@objc public enum FcrUINetworkInfoStyle : Swift.Int {
+  case bandwidth = 0
+  case packetloss = 1
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers @objc @_Concurrency.MainActor(unsafe) public class FcrUIBaseScene : FcrUIScene.FcrUISceneNode, FcrUIScene.FcrUISceneItem, AgoraUIFoundation.AgoraUIContentContainer, FcrCore.FcrCoreEngineObserver {
+  @objc deinit
+  @_Concurrency.MainActor(unsafe) @objc public func exit()
+  @_Concurrency.MainActor(unsafe) @objc public func addObserver(observer: FcrUIScene.FcrUISceneObserver)
+  @_Concurrency.MainActor(unsafe) @objc public func removeObserver(observer: FcrUIScene.FcrUISceneObserver)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func dismiss(animated flag: Swift.Bool, completion: (() -> Swift.Void)? = nil)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillTransition(to size: CoreGraphics.CGSize, with coordinator: UIKit.UIViewControllerTransitionCoordinator)
+  @_Concurrency.MainActor(unsafe) @objc public func initViews()
+  @_Concurrency.MainActor(unsafe) @objc public func initViewFrame()
+  @_Concurrency.MainActor(unsafe) @objc public func updateViewProperties()
+  @_Concurrency.MainActor(unsafe) @objc public func onConnectionStateUpdated(state: FcrCore.FcrConnectionState)
+}
+@objc public class FcrUIResource : ObjectiveC.NSObject {
+  public init(virtualBackgroundImages: [Swift.String]?, virtualBackgroundVideos: [Swift.String]?)
+  @objc deinit
+}
+@objc public class FcrUISceneCreatorConfig : ObjectiveC.NSObject {
+  @objc final public let appId: Swift.String
+  @objc final public let userId: Swift.String
+  @objc public var parameters: [Swift.String : Any]?
+  @objc public init(appId: Swift.String, userId: Swift.String)
+  @objc deinit
+}
+@objc public class FcrUISceneConfig : ObjectiveC.NSObject {
+  @objc final public let roomId: Swift.String
+  @objc final public let roomToken: Swift.String
+  @objc final public let userName: Swift.String
+  @objc final public let userRole: FcrCore.FcrUserRole
+  @objc final public let userProperties: [Swift.String : Any]?
+  @objc final public let resource: FcrUIScene.FcrUIResource?
+  @objc final public let inviteLink: Swift.String
+  @objc public init(roomId: Swift.String, roomToken: Swift.String, userName: Swift.String, userRole: FcrCore.FcrUserRole, inviteLink: Swift.String, userProperties: [Swift.String : Any]?, resource: FcrUIScene.FcrUIResource?)
+  @objc deinit
+}
+@objc public class FcrUISceneCreator : ObjectiveC.NSObject {
+  @objc public init(config: FcrUIScene.FcrUISceneCreatorConfig)
+  @objc deinit
+  @objc public func launch(config: FcrUIScene.FcrUISceneConfig, cancel: (() -> (Swift.Void))? = nil, success: ((FcrUIScene.FcrUISceneItem) -> (Swift.Void))? = nil, failure: FcrCore.FcrCoreFailureCompletion? = nil, parent: UIKit.UIViewController)
+}
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class FcrUIBaseNode : UIKit.UIViewController, AgoraUIFoundation.AgoraUIActivity, AgoraUIFoundation.AgoraUIViewOrientation {
+  @_Concurrency.MainActor(unsafe) @objc public var orientation: AgoraUIFoundation.AgoraUIOrientation
+  @objc deinit
+  @_Concurrency.MainActor(unsafe) @objc public func viewWillActive()
+  @_Concurrency.MainActor(unsafe) @objc public func viewWillInactive()
+  @_Concurrency.MainActor(unsafe) @objc public func onViewOrientationUpdated(_ orientation: AgoraUIFoundation.AgoraUIOrientation)
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class FcrUISceneNode : FcrUIScene.FcrUIBaseNode {
+  @objc deinit
+}
+@objc public enum FcrUIExitReason : Swift.Int {
+  case leaveRoom = 1
+  case closeRoom = 2
+  case kickedOut = 3
+  case aborted = 4
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public protocol FcrUISceneObserver : ObjectiveC.NSObjectProtocol {
+  @objc func onExited(reason: FcrUIScene.FcrUIExitReason)
+}
+@objc public protocol FcrUISceneItem : ObjectiveC.NSObjectProtocol {
+  @objc func exit()
+  @objc func addObserver(observer: FcrUIScene.FcrUISceneObserver)
+  @objc func removeObserver(observer: FcrUIScene.FcrUISceneObserver)
+}
+extension FcrUIScene.FcrUINetworkQuality : Swift.Equatable {}
+extension FcrUIScene.FcrUINetworkQuality : Swift.Hashable {}
+extension FcrUIScene.FcrUINetworkQuality : Swift.RawRepresentable {}
+extension FcrUIScene.LeavingAction : Swift.Equatable {}
+extension FcrUIScene.LeavingAction : Swift.Hashable {}
+extension FcrUIScene.LeavingAction : Swift.RawRepresentable {}
+extension FcrUIScene.FcrUINetworkInfoStyle : Swift.Equatable {}
+extension FcrUIScene.FcrUINetworkInfoStyle : Swift.Hashable {}
+extension FcrUIScene.FcrUINetworkInfoStyle : Swift.RawRepresentable {}
+extension FcrUIScene.FcrUIExitReason : Swift.Equatable {}
+extension FcrUIScene.FcrUIExitReason : Swift.Hashable {}
+extension FcrUIScene.FcrUIExitReason : Swift.RawRepresentable {}

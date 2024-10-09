@@ -1,0 +1,1014 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.6 (swiftlang-5.6.0.323.62 clang-1316.0.20.8)
+// swift-module-flags: -target x86_64-apple-ios11.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name FcrCore
+import AgoraFoundation
+import AgoraLog
+import AgoraRte
+@_exported import FcrCore
+import Foundation
+import HyphenateChat
+import ReplayKit
+import Swift
+import Whiteboard
+import YYModel
+import _Concurrency
+@objc public protocol FcrBoardRoomObserver : ObjectiveC.NSObjectProtocol {
+  @objc optional func onConnectionStateUpdated(state: FcrCore.FcrConnectionState)
+  @objc optional func onUndoStateUpdated(enable: Swift.Bool)
+  @objc optional func onRedoStateUpdated(enable: Swift.Bool)
+  @objc optional func onActive(ownerId: Swift.String, operatorUser: FcrCore.FcrUserInfo?)
+  @objc optional func onInactive(reason: FcrCore.FcrBoardInactiveReason, operatorUser: FcrCore.FcrUserInfo?)
+  @objc optional func onBackgroundColorUpdated(color: Swift.String, operatorUser: FcrCore.FcrUserInfo?)
+}
+@objc public protocol FcrBoardRoomControl : ObjectiveC.NSObjectProtocol {
+  @objc func active(success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func inactive(success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func open(success: ((FcrCore.FcrBoardRoomMainWindow) -> Swift.Void)?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func close()
+  @objc func setBackgroundColor(_ color: UIKit.UIColor, hexString: Swift.String?, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func getActivity() -> Swift.Bool
+  @objc func getOwnerId() -> Swift.String?
+  @objc func getBackgroundColor() -> Swift.String?
+  @objc func getConnectionState() -> FcrCore.FcrConnectionState
+  @objc func getMainWindow() -> FcrCore.FcrBoardRoomMainWindow?
+  @objc func getContentView() -> UIKit.UIView
+  @objc func addObserver(observer: FcrCore.FcrBoardRoomObserver)
+  @objc func removeObserver(observer: FcrCore.FcrBoardRoomObserver)
+}
+@objc public protocol FcrBoardRoomMainWindow : ObjectiveC.NSObjectProtocol {
+  @objc func undo()
+  @objc func redo()
+  @objc func clean()
+  @objc func setToolType(toolType: FcrCore.FcrBoardToolType)
+  @objc func setStrokeWidth(strokeWidth: CoreGraphics.CGFloat)
+  @objc func setStrokeColor(strokeColor: UIKit.UIColor)
+  @objc func setTextColor(textColor: UIKit.UIColor)
+  @objc func setTextSize(textSize: CoreGraphics.CGFloat)
+  @objc func setBackgroundColor(backgroudColor: UIKit.UIColor)
+  @objc func getSnapshotImage(success: ((UIKit.UIImage) -> Swift.Void)?, failure: FcrCore.FcrCoreFailureCompletion?)
+}
+extension Whiteboard.WhiteRoomPhase : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+@objc public protocol FcrChatRoomObserver : ObjectiveC.NSObjectProtocol {
+  @objc optional func onConnectionStateUpdated(state: FcrCore.FcrConnectionState)
+  @objc optional func onTextMessageReceived(message: FcrCore.FcrChatRoomReceivedTextMessage)
+}
+@objc public protocol FcrChatRoomControl : ObjectiveC.NSObjectProtocol {
+  @objc func getConnectionState() -> FcrCore.FcrConnectionState
+  @objc func sendMessage(message: FcrCore.FcrChatRoomSendBaseMessage, success: ((FcrCore.FcrChatRoomReceivedBaseMessage) -> (Swift.Void))?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func addObserver(observer: FcrCore.FcrChatRoomObserver)
+  @objc func removeObserver(observer: FcrCore.FcrChatRoomObserver)
+}
+public typealias FcrCoreUserPageCompletion = AgoraRte.AgoraRteUserPageCompletion
+public typealias FcrCoreSnapshotCompletion = (FcrCore.FcrSnapshotInfo) -> (Swift.Void)
+public typealias FcrCoreStringCompletion = (Swift.String) -> (Swift.Void)
+public typealias FcrCoreSuccessCompletion = () -> (Swift.Void)
+public typealias FcrCoreFailureCompletion = (FcrCore.FcrError) -> (Swift.Void)
+public typealias FcrCoreRequestSuccess<T> = (T) throws -> (Swift.Void) where T : AgoraFoundation.AgoraCodable
+@objc public protocol FcrCoreEngineObserver : ObjectiveC.NSObjectProtocol {
+  @objc optional func onPeerMessageReceived(message: FcrCore.FcrMessage)
+  @objc optional func onConnectionStateUpdated(state: FcrCore.FcrConnectionState)
+}
+@objc public class FcrCoreEngine : ObjectiveC.NSObject {
+  public init(config: FcrCore.FcrCoreEngineConfig)
+  @objc public func login(userToken: Swift.String, success: FcrCore.FcrCoreSuccessCompletion? = nil, failure: FcrCore.FcrCoreFailureCompletion? = nil)
+  @objc public func logout()
+  @objc deinit
+  @objc public func createRoomControl(config: FcrCore.FcrCreateRoomControlConfig) -> FcrCore.FcrMainRoomControl?
+  @objc public func getMediaControl() -> FcrCore.FcrMediaControl
+  @objc public func getMonitorControl() -> FcrCore.FcrMonitorControl
+  @objc public func sendPeerMessage(payload: [Swift.String : Any], guaranteedDelivery: Swift.Bool, receiverId: Swift.String, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc public func getPeerSessionControl() -> FcrCore.FcrPeerSessionControl?
+  @objc public func addObserver(observer: FcrCore.FcrCoreEngineObserver)
+  @objc public func removeObserver(observer: FcrCore.FcrCoreEngineObserver)
+  @objc public func setParameters(parameters: [Swift.String : Any])
+  @objc public static func getVersion() -> Swift.String
+}
+extension FcrCore.FcrCoreEngine : AgoraRte.AgoraRteEngineDelegate {
+  @objc dynamic public func onPeerMessageReceived(_ message: AgoraRte.AgoraRteMessage)
+  @objc dynamic public func onConnectionStateUpdated(_ state: AgoraRte.AgoraRteConnectionState)
+}
+public typealias FcrConnectionState = AgoraRte.AgoraRteConnectionState
+public typealias FcrRegion = AgoraRte.AgoraRteRegion
+public typealias FcrUserUpdatedReason = AgoraRte.AgoraRteUserUpdatedReason
+public typealias FcrRoomConnectorType = AgoraRte.AgoraRteRoomConnectorType
+extension AgoraRte.AgoraRteRoomConnectorType : AgoraFoundation.AgoraSwiftEnumDescription {
+  public func agora_description() -> Swift.String
+}
+extension AgoraRte.AgoraRteConnectionState : AgoraFoundation.AgoraSwiftEnumDescription {
+  public func agora_description() -> Swift.String
+}
+@objc public enum FcrRoomState : Swift.Int, AgoraFoundation.AgoraSwiftEnumDescription {
+  case initialized = 0
+  case started = 1
+  case ended = 2
+  case closed = 3
+  public func agora_description() -> Swift.String
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum FcrRecordingState : Swift.Int, AgoraFoundation.AgoraSwiftEnumDescription {
+  case starting = 1
+  case started = 2
+  case paused = 3
+  case stopped = 4
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum FcrCloudRecordingAudioProfile : Swift.Int, AgoraFoundation.AgoraSwiftEnumDescription {
+  case musicMono48K = 0
+  case musicMono128K = 1
+  case musicStereo192K = 2
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum FcrLiveStreamingState : Swift.Int, AgoraFoundation.AgoraSwiftEnumDescription {
+  case stopped = 0
+  case started = 1
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum FcrLiveStreamingLayoutType : Swift.Int, AgoraFoundation.AgoraSwiftEnumDescription {
+  case gallery = 1
+  case speaker = 2
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum FcrUserKickedOutType : Swift.Int, AgoraFoundation.AgoraSwiftEnumDescription {
+  case once = 1
+  case forever = 2
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum FcrUserLeftReason : Swift.Int, AgoraFoundation.AgoraSwiftEnumDescription {
+  case leaveRoom = 1
+  case kickOut = 2
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum FcrUserRole : Swift.Int, AgoraFoundation.AgoraSwiftEnumDescription {
+  case host = 1
+  case cohost = 2
+  case participant = 3
+  public var stringValue: Swift.String {
+    get
+  }
+  public func agora_description() -> Swift.String
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+extension AgoraRte.AgoraRteUserUpdatedReason : AgoraFoundation.AgoraSwiftEnumDescription {
+  public func agora_description() -> Swift.String
+}
+@objc public class FcrTargetRoleType : ObjectiveC.NSObject, Swift.OptionSet, AgoraFoundation.AgoraSwiftObjectDescription {
+  public static let `self`: FcrCore.FcrTargetRoleType
+  public static let host: FcrCore.FcrTargetRoleType
+  public static let coHost: FcrCore.FcrTargetRoleType
+  public static let participant: FcrCore.FcrTargetRoleType
+  final public let rawValue: Swift.UInt
+  required public init(rawValue: Swift.UInt)
+  public static func create(fromString stringValue: Swift.String) -> FcrCore.FcrTargetRoleType?
+  public static func create(fromStringArray stringArray: [Swift.String]) -> FcrCore.FcrTargetRoleType
+  public func contains(_ roleType: FcrCore.FcrTargetRoleType) -> Swift.Bool
+  public typealias ArrayLiteralElement = FcrCore.FcrTargetRoleType
+  public typealias Element = FcrCore.FcrTargetRoleType
+  public typealias RawValue = Swift.UInt
+  @objc deinit
+}
+public typealias FcrStreamType = AgoraRte.AgoraRteStreamType
+public typealias FcrVideoStreamType = AgoraRte.AgoraRteVideoStreamType
+public typealias FcrStreamLatencyLevel = AgoraRte.AgoraRteStreamLatencyLevel
+public typealias FcrStreamPrivilegeVideoSourceType = AgoraRte.AgoraRteStreamPrivilegeVideoSourceType
+public typealias FcrStreamPrivilegeAudioSourceType = AgoraRte.AgoraRteStreamPrivilegeAudioSourceType
+extension AgoraRte.AgoraRteStreamType : AgoraFoundation.AgoraSwiftEnumDescription {
+  public func agora_description() -> Swift.String
+}
+extension AgoraRte.AgoraRteVideoStreamType : AgoraFoundation.AgoraSwiftEnumDescription {
+}
+extension AgoraRte.AgoraRteStreamLatencyLevel : AgoraFoundation.AgoraSwiftEnumDescription, Swift.CaseIterable {
+  public static var allCases: [FcrCore.FcrStreamLatencyLevel]
+  public typealias AllCases = [AgoraRte.AgoraRteStreamLatencyLevel]
+}
+extension AgoraRte.AgoraRteVideoRenderMode : AgoraFoundation.AgoraSwiftEnumDescription {
+}
+extension AgoraRte.AgoraRteAudioRawDataOutputPosition : AgoraFoundation.AgoraSwiftEnumDescription {
+}
+extension AgoraRte.AgoraRteVideoOutputOrientationMode : AgoraFoundation.AgoraSwiftEnumDescription {
+}
+extension AgoraRte.AgoraRteDegradationPreference : AgoraFoundation.AgoraSwiftEnumDescription {
+}
+@objc public enum FcrChatRoomMessageType : Swift.Int {
+  case text, image, custom
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public typealias FcrCameraPosition = AgoraRte.AgoraRteCameraPosition
+public typealias FcrMediaSourceState = AgoraRte.AgoraRteMediaSourceState
+public typealias FcrVideoSourceType = AgoraRte.AgoraRteVideoSourceType
+public typealias FcrAudioSourceType = AgoraRte.AgoraRteAudioSourceType
+public typealias FcrVideoRenderMode = AgoraRte.AgoraRteVideoRenderMode
+public typealias FcrAudioRawDataOutputPosition = AgoraRte.AgoraRteAudioRawDataOutputPosition
+public typealias FcrVideoOutputOrientationMode = AgoraRte.AgoraRteVideoOutputOrientationMode
+public typealias FcrDegradationPreference = AgoraRte.AgoraRteDegradationPreference
+public typealias FcrCapability = AgoraRte.AgoraRteCapability
+public typealias FcrAiDenoiseLevel = AgoraRte.AgoraRteAiDenoiseLevel
+public typealias FcrLighteningContrastLevel = AgoraRte.AgoraRteLighteningContrastLevel
+public typealias FcrVirtualBackgroundSourceType = AgoraRte.AgoraRteVirtualBackgroundSourceType
+public typealias FcrAudioOutputRouting = AgoraRte.AgoraRteAudioOutputRouting
+@objc public enum FcrDeviceType : Swift.Int, AgoraFoundation.AgoraSwiftEnumDescription {
+  case camera = 1
+  case microphone = 2
+  case speaker = 3
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+extension AgoraRte.AgoraRteCameraPosition : AgoraFoundation.AgoraSwiftEnumDescription {
+}
+extension AgoraRte.AgoraRteMediaSourceState : AgoraFoundation.AgoraSwiftEnumDescription {
+  public func agora_description() -> Swift.String
+}
+extension AgoraRte.AgoraRteVideoSourceType : AgoraFoundation.AgoraSwiftEnumDescription {
+  public func agora_description() -> Swift.String
+}
+extension AgoraRte.AgoraRteAudioSourceType : AgoraFoundation.AgoraSwiftEnumDescription {
+  public func agora_description() -> Swift.String
+}
+public typealias FcrStreamPrivilegeOperation = AgoraRte.AgoraRteStreamPrivilegeOperation
+@objc public enum FcrPermissionAction : Swift.Int, AgoraFoundation.AgoraSwiftEnumDescription, Swift.CaseIterable {
+  case roomStart
+  case roomEnd
+  case roomSetPassword
+  case roomJoin
+  case roomLeave
+  case roomLock
+  case roomUnlock
+  case userSetRole
+  case userKickOut
+  case userBlock
+  case userChangeName
+  case userAllowChangeName
+  case userDisallowChangeName
+  case userRevokeRole
+  case streamMuteAudio
+  case streamStartAudio
+  case streamRequestStartAudio
+  case streamAllowStartAudio
+  case streamDisallowStartAudio
+  case streamStopVideo
+  case streamStartVideo
+  case streamRequestStartVideo
+  case streamAllowStartVideo
+  case streamDisallowStartVideo
+  case streamStartScreenSharing
+  case streamStopScreenSharing
+  case streamAllowStartScreenSharing
+  case streamDisallowStartScreenSharing
+  case streamBatchMuteAudio
+  case streamBatchRequestStartAudio
+  case streamDisallowJoinWithMuteAudio
+  case streamAllowJoinWithMuteAudio
+  case waitingRoomEnable
+  case waitingRoomDisable
+  case waitingRoomAddUser
+  case waitingRoomRemoveUser
+  case chatSendPublic
+  case chatSendPrivate
+  case chatAllowSendAll
+  case chatDisallowSendAll
+  case chatAllowSendPrivate
+  case chatDisallowSendPrivate
+  case startCloudRecording
+  case pauseCloudRecording
+  case resumeCloudRecording
+  case stopCloudRecording
+  case boardStart
+  case boardClose
+  case boardWrite
+  case boardAllowStart
+  case boardDisallowStart
+  case boardAllowWrite
+  case boardDisallowWrite
+  public var stringValue: Swift.String {
+    get
+  }
+  public func agora_description() -> Swift.String
+  public init?(rawValue: Swift.Int)
+  public typealias AllCases = [FcrCore.FcrPermissionAction]
+  public typealias RawValue = Swift.Int
+  public static var allCases: [FcrCore.FcrPermissionAction] {
+    get
+  }
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum FcrSecurityAction : Swift.Int, Swift.CaseIterable, AgoraFoundation.AgoraSwiftEnumDescription {
+  case password = 0
+  case lockedRoom = 1
+  case waitingRoom = 2
+  case shareScreen = 3
+  case changeName = 4
+  case startAudio = 5
+  case startVideo = 6
+  case joinWithMuteAudio = 7
+  case sendChat = 8
+  case shareBoard = 9
+  case sharing = 10
+  public var stringValue: Swift.String {
+    get
+  }
+  public func agora_description() -> Swift.String
+  public init?(rawValue: Swift.Int)
+  public typealias AllCases = [FcrCore.FcrSecurityAction]
+  public typealias RawValue = Swift.Int
+  public static var allCases: [FcrCore.FcrSecurityAction] {
+    get
+  }
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum FcrBoardToolType : Swift.Int, AgoraFoundation.AgoraSwiftEnumDescription {
+  case none = 0
+  case selector = 1
+  case laserPointer = 2
+  case eraser = 3
+  case text = 4
+  case curve = 5
+  case straight = 6
+  case arrow = 7
+  case rectangle = 8
+  case triangle = 9
+  case rhombu = 10
+  case pentagra = 11
+  case ellips = 12
+  public var isShape: Swift.Bool {
+    get
+  }
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum FcrBoardInactiveReason : Swift.Int, AgoraFoundation.AgoraSwiftEnumDescription {
+  case close = 1
+  case timeout = 2
+  case seize = 3
+  case permissionReclaimed = 4
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public typealias FcrError = AgoraFoundation.AgoraError
+@objc public protocol FcrGroupObserver : ObjectiveC.NSObjectProtocol {
+  @objc optional func onGroupsAdded(events: [FcrCore.FcrGroupAddedEvent])
+  @objc optional func onGroupsUpdated(events: [FcrCore.FcrGroupUpdatedEvent])
+  @objc optional func onGroupsRemoved(events: [FcrCore.FcrGroupRemovedEvent])
+  @objc optional func onUserListAddedToGroup(events: [FcrCore.FcrGroupUserAddedEvent])
+  @objc optional func onUserListMoveToGroup(events: [FcrCore.FcrGroupUserMovedEvent])
+  @objc optional func onUserListRemovedFromGroup(events: [FcrCore.FcrGroupUserRemovedEvent])
+}
+@objc public protocol FcrGroupControl : ObjectiveC.NSObjectProtocol {
+  @objc func getGroupList() -> [FcrCore.FcrGroupInfo]?
+  @objc func getGroupUserList(groupId: Swift.String) -> [Swift.String]?
+  @objc func addGroups(groups: [FcrCore.FcrGroupCreateConfig], success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func updateGroups(groups: [FcrCore.FcrGroupUpdateOptions], success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func deleteGroups(groupIds: [Swift.String], success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func deleteAllGroups(success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func addUsers(userList: [Swift.String], groupId: Swift.String, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func removeUsers(userList: [Swift.String], groupId: Swift.String, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func moveUsers(userList: [Swift.String], fromGroupId: Swift.String, toGroupId: Swift.String, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func createSubRoomControl(groupId: Swift.String) -> FcrCore.FcrSubRoomControl
+  @objc func addObserver(observer: FcrCore.FcrGroupObserver)
+  @objc func removeObserver(observer: FcrCore.FcrGroupObserver)
+}
+@objc public protocol FcrRecordAudioRawDataObserver : ObjectiveC.NSObjectProtocol {
+  @objc func onAudioRawDataRecorded(data: FcrCore.FcrAudioRawData)
+}
+@objc public protocol FcrMediaObserver : ObjectiveC.NSObjectProtocol {
+  @objc optional func onCameraStateUpdated(state: FcrCore.FcrMediaSourceState)
+  @objc optional func onMicrophoneStateUpdated(state: FcrCore.FcrMediaSourceState)
+  @objc optional func onScreenCaptureStateUpdated(state: FcrCore.FcrMediaSourceState)
+  @objc optional func onSpeakerStateUpdated(state: FcrCore.FcrMediaSourceState)
+  @objc optional func onMicrophoneVolumeIndicationUpdated(volume: Swift.UInt8)
+  @objc optional func onOutputVolumeIndicationUpdated(volume: Swift.UInt8)
+  @objc optional func onAudioOutputRoutingUpdated(routing: FcrCore.FcrAudioOutputRouting)
+}
+@objc public protocol FcrMediaControl : ObjectiveC.NSObjectProtocol {
+  @objc func openDevice(deviceType: FcrCore.FcrDeviceType) -> FcrCore.FcrError?
+  @objc func closeDevice(deviceType: FcrCore.FcrDeviceType) -> FcrCore.FcrError?
+  @objc func getDeviceState(deviceType: FcrCore.FcrDeviceType) -> FcrCore.FcrMediaSourceState
+  @objc func getDeviceId(deviceType: FcrCore.FcrDeviceType) -> Swift.String
+  @objc func switchCamera() -> FcrCore.FcrError?
+  @objc func getCameraPosition() -> FcrCore.FcrCameraPosition
+  @objc func startCameraPreview(config: FcrCore.FcrVideoRenderConfig, view: UIKit.UIView) -> FcrCore.FcrError?
+  @objc func stopCameraPreview(view: UIKit.UIView) -> FcrCore.FcrError?
+  @objc func updateCameraPreview(config: FcrCore.FcrVideoRenderConfig) -> FcrCore.FcrError?
+  @objc func startCameraTest() -> FcrCore.FcrError?
+  @objc func stopCameraTest() -> FcrCore.FcrError?
+  @objc func startMicrophoneTest() -> FcrCore.FcrError?
+  @objc func stopMicrophoneTest() -> FcrCore.FcrError?
+  @objc func isCapabilitySupported(capability: FcrCore.FcrCapability) -> Swift.Bool
+  @objc func startScreenCapture(params: FcrCore.FcrScreenCaptureParams) -> FcrCore.FcrError?
+  @objc func stopScreenCapture() -> FcrCore.FcrError?
+  @objc func updateScreenCapture(hasAudio: Swift.Bool) -> FcrCore.FcrError?
+  @objc func getScreenCaptureState() -> FcrCore.FcrMediaSourceState
+  @objc func setEnableSpeaker(enable: Swift.Bool) -> FcrCore.FcrError?
+  @objc func getAudioOutputRouting() -> FcrCore.FcrAudioOutputRouting
+  @objc func adjustOutputVolume(volume: Swift.UInt) -> FcrCore.FcrError?
+  @objc func getAudioEffectEnhancer() -> FcrCore.FcrAudioEffectEnhancer?
+  @objc func getVideoEffectEnhancer() -> FcrCore.FcrVideoEffectEnhancer?
+  @objc func addObserver(observer: FcrCore.FcrMediaObserver)
+  @objc func removeObserver(observer: FcrCore.FcrMediaObserver)
+  @objc func addRecordAudioRawDataObserver(observer: FcrCore.FcrRecordAudioRawDataObserver)
+  @objc func removeRecordAudioRawDataObserver(observer: FcrCore.FcrRecordAudioRawDataObserver)
+}
+@objc public protocol FcrMonitorObserver : ObjectiveC.NSObjectProtocol {
+  @objc optional func onPerformanceUpdated(info: FcrCore.FcrPerformanceInfo)
+}
+@objc public protocol FcrMonitorControl {
+  @objc func uploadLog(success: FcrCore.FcrCoreStringCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func addObserver(observer: FcrCore.FcrMonitorObserver)
+  @objc func removeObserver(observer: FcrCore.FcrMonitorObserver)
+}
+public typealias FcrDualVideoStreamConfig = AgoraRte.AgoraRteDualVideoStreamConfig
+public typealias FcrStreamEncryptionConfig = AgoraRte.AgoraRteStreamEncryptionConfig
+public typealias FcrNetworkQualityEvent = AgoraRte.AgoraRteNetworkQualityEvent
+public typealias FcrNetworkStats = AgoraRte.AgoraRteNetworkStats
+public typealias FcrAudioRawDataConfig = AgoraRte.AgoraRteAudioRawDataConfig
+@objc @objcMembers public class FcrCoreEngineConfig : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let appId: Swift.String
+  @objc final public let token: Swift.String
+  @objc final public let region: FcrCore.FcrRegion
+  @objc final public let userId: Swift.String
+  @objc public var userProperties: [Swift.String : Any]?
+  @objc final public let dualCameraVideoStreamConfig: FcrCore.FcrDualVideoStreamConfig
+  @objc public var parameters: [Swift.String : Any]?
+  @objc public init(appId: Swift.String, token: Swift.String, region: FcrCore.FcrRegion, userId: Swift.String, userProperties: [Swift.String : Any]?, dualCameraVideoStreamConfig: FcrCore.FcrDualVideoStreamConfig, parameters: [Swift.String : Any]?)
+  @objc public init(appId: Swift.String, token: Swift.String, region: FcrCore.FcrRegion, userId: Swift.String)
+  @objc deinit
+}
+extension AgoraRte.AgoraRteDualVideoStreamConfig {
+  public static func defaultConfig() -> FcrCore.FcrDualVideoStreamConfig
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrMessage : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let senderId: Swift.String
+  @objc final public let timestamp: Swift.UInt64
+  @objc final public let payload: [Swift.String : Any]
+  @objc deinit
+}
+@objc @objcMembers public class FcrPeerSessionParams : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let sessionKey: Swift.String
+  @objc final public let receiverId: Swift.String
+  @objc final public let duration: Swift.UInt32
+  @objc final public let payload: [Swift.String : Any]
+  @objc public init(sessionKey: Swift.String, duration: Swift.UInt32, receiverId: Swift.String, payload: [Swift.String : Any])
+  @objc deinit
+}
+@objc @objcMembers public class FcrSession : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let sessionId: Swift.String
+  @objc final public let sessionKey: Swift.String
+  @objc final public let timestamp: Swift.UInt64
+  @objc final public let duration: Swift.UInt32
+  @objc final public let senderId: Swift.String
+  @objc final public let interval: Swift.UInt32
+  @objc final public let payload: [Swift.String : Any]
+  @objc public init(sessionId: Swift.String, sessionKey: Swift.String, timestamp: Swift.UInt64, duration: Swift.UInt32, senderId: Swift.String, interval: Swift.UInt32, payload: [Swift.String : Any])
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class FcrPeerSession : FcrCore.FcrSession {
+  @objc override public init(sessionId: Swift.String, sessionKey: Swift.String, timestamp: Swift.UInt64, duration: Swift.UInt32, senderId: Swift.String, interval: Swift.UInt32, payload: [Swift.String : Any])
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class FcrRoomSession : FcrCore.FcrSession {
+  @objc override public init(sessionId: Swift.String, sessionKey: Swift.String, timestamp: Swift.UInt64, duration: Swift.UInt32, senderId: Swift.String, interval: Swift.UInt32, payload: [Swift.String : Any])
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrSessionResponse : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let sessionId: Swift.String
+  @objc final public let sessionKey: Swift.String
+  @objc final public let responderId: Swift.String
+  @objc public var payload: [Swift.String : Any]
+  @objc final public let cause: [Swift.String : Any]?
+  @objc deinit
+}
+@objc @objcMembers public class FcrRoomSessionParams : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let sessionKey: Swift.String
+  @objc final public let duration: Swift.UInt32
+  @objc final public let payload: [Swift.String : Any]
+  @objc public init(sessionKey: Swift.String, duration: Swift.UInt32, payload: [Swift.String : Any])
+  @objc deinit
+}
+public typealias FcrStreamJoinConfig = AgoraRte.AgoraRteStreamJoinConfig
+@objc @objcMembers public class FcrCreateRoomControlConfig : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let roomId: Swift.String
+  @objc public init(roomId: Swift.String)
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrRoomInfo : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let roomId: Swift.String
+  @objc final public let roomName: Swift.String
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrRoomSchedule : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let startTime: Swift.UInt64
+  @objc final public let duration: Swift.UInt64
+  @objc deinit
+}
+@objc @objcMembers public class FcrRoomJoinOptions : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let userName: Swift.String
+  @objc final public let userRole: FcrCore.FcrUserRole
+  @objc final public let userProperties: [Swift.String : Any]?
+  @objc final public let roomToken: Swift.String
+  @objc final public let streamLatency: FcrCore.FcrStreamLatencyLevel
+  @objc public var createStreamConfigs: [FcrCore.FcrStreamJoinConfig]?
+  @objc public init(userName: Swift.String, userRole: FcrCore.FcrUserRole, userProperties: [Swift.String : Any]?, roomToken: Swift.String, streamLatency: FcrCore.FcrStreamLatencyLevel, createStreamConfigs: [FcrCore.FcrStreamJoinConfig]?)
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrRoomPropertiesUpdatedEvent : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let changedProperties: [Swift.String : Any]
+  @objc final public let cause: [Swift.String : Any]?
+  @objc final public let operatorUser: FcrCore.FcrUserInfo?
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrRoomPropertiesDeletedEvent : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let changedKeyPaths: [Swift.String]
+  @objc final public let cause: [Swift.String : Any]?
+  @objc final public let operatorUser: FcrCore.FcrUserInfo?
+  @objc deinit
+}
+@objc @objcMembers public class FcrCloudRecordingConfig : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let videoEncoderConfig: FcrCore.FcrVideoEncoderConfig
+  @objc final public let audioProfile: FcrCore.FcrCloudRecordingAudioProfile
+  @objc public init(videoEncoderConfig: FcrCore.FcrVideoEncoderConfig, audioProfile: FcrCore.FcrCloudRecordingAudioProfile)
+  @objc deinit
+}
+@objc @objcMembers public class FcrLiveStreamingConfig : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc public var pushStreamingUrl: Swift.String
+  @objc public var pushStreamingKey: Swift.String
+  @objc public var pullStreamingUrl: Swift.String
+  @objc public var layoutType: FcrCore.FcrLiveStreamingLayoutType
+  @objc public init(pushStreamingUrl: Swift.String, pushStreamingKey: Swift.String, pullStreamingUrl: Swift.String, layoutType: FcrCore.FcrLiveStreamingLayoutType)
+  @objc deinit
+}
+public typealias FcrUserPageParams = AgoraRte.AgoraRteUserPageParams
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrUserInfo : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let userId: Swift.String
+  @objc final public let userName: Swift.String
+  @objc final public let userRole: FcrCore.FcrUserRole
+  @objc final public let connectorType: FcrCore.FcrRoomConnectorType
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrUserJoinedEvent : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let modifiedUser: FcrCore.FcrUserInfo
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrUserLeftEvent : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let modifiedUser: FcrCore.FcrUserInfo
+  @objc final public let reason: FcrCore.FcrUserLeftReason
+  @objc final public let operatorUser: FcrCore.FcrUserInfo?
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrUserUpdatedEvent : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let modifiedUser: FcrCore.FcrUserInfo
+  @objc final public let reason: FcrCore.FcrUserUpdatedReason
+  @objc final public let operatorUser: FcrCore.FcrUserInfo?
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrUserKickedOutEvent : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let type: FcrCore.FcrUserKickedOutType
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrUserPropertiesUpdatedEvent : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let changedProperties: [Swift.String : Any]
+  @objc final public let cause: [Swift.String : Any]?
+  @objc final public let modifiedUser: FcrCore.FcrUserInfo
+  @objc final public let operatorUser: FcrCore.FcrUserInfo?
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrUserPropertiesDeletedEvent : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let changedKeyPaths: [Swift.String]
+  @objc final public let cause: [Swift.String : Any]?
+  @objc final public let modifiedUser: FcrCore.FcrUserInfo
+  @objc final public let operatorUser: FcrCore.FcrUserInfo?
+  @objc deinit
+}
+public typealias FcrStreamCreateConfig = AgoraRte.AgoraRteStreamCreateConfig
+public typealias FcrUpdateStreamPrivilege = AgoraRte.AgoraRteUpdateStreamPrivilege
+public typealias FcrSnapshotInfo = AgoraRte.AgoraRteSnapshotInfo
+public typealias FcrLocalVideoStats = AgoraRte.AgoraRteLocalVideoStats
+public typealias FcrLocalAudioStats = AgoraRte.AgoraRteLocalAudioStats
+public typealias FcrRemoteVideoStats = AgoraRte.AgoraRteRemoteVideoStats
+public typealias FcrRemoteAudioStats = AgoraRte.AgoraRteRemoteAudioStats
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrStreamInfo : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let streamId: Swift.String
+  @objc final public let streamName: Swift.String?
+  @objc final public let owner: FcrCore.FcrUserInfo
+  @objc final public let streamType: FcrCore.FcrStreamType
+  @objc final public let videoSourceType: FcrCore.FcrVideoSourceType
+  @objc final public let audioSourceType: FcrCore.FcrAudioSourceType
+  @objc final public let videoSourceState: FcrCore.FcrMediaSourceState
+  @objc final public let audioSourceState: FcrCore.FcrMediaSourceState
+  @objc final public let videoSourceId: Swift.String?
+  @objc final public let audioSourceId: Swift.String?
+  @objc final public let connectorType: FcrCore.FcrRoomConnectorType
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrStreamEvent : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let modifiedStream: FcrCore.FcrStreamInfo
+  @objc final public let operatorUser: FcrCore.FcrUserInfo?
+  @objc final public let cause: [Swift.String : Any]?
+  @objc deinit
+}
+@objc @objcMembers public class FcrUpdateStreamPrivilegeScope : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let videoSourceType: FcrCore.FcrStreamPrivilegeVideoSourceType
+  @objc final public let audioSourceType: FcrCore.FcrStreamPrivilegeAudioSourceType
+  @objc final public let targetRoleType: FcrCore.FcrTargetRoleType
+  @objc final public let targetRoleIsInclude: Swift.Bool
+  @objc public init(videoSourceType: FcrCore.FcrStreamPrivilegeVideoSourceType, audioSourceType: FcrCore.FcrStreamPrivilegeAudioSourceType, targetRoleType: FcrCore.FcrTargetRoleType, targetRoleIsInclude: Swift.Bool)
+  @objc deinit
+}
+@objc @objcMembers public class FcrScreenStreamCreateConfig : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let streamType: FcrCore.FcrStreamType
+  @objc public init(streamType: FcrCore.FcrStreamType)
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrGroupInfo : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let groupId: Swift.String
+  @objc final public let groupName: Swift.String
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrGroupAddedEvent : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let groupInfo: FcrCore.FcrGroupInfo
+  @objc final public let operatorUser: FcrCore.FcrUserInfo?
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrGroupUpdatedEvent : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let groupInfo: FcrCore.FcrGroupInfo
+  @objc final public let operatorUser: FcrCore.FcrUserInfo?
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrGroupRemovedEvent : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let groupInfo: FcrCore.FcrGroupInfo
+  @objc final public let operatorUser: FcrCore.FcrUserInfo?
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrGroupCreateConfig : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let groupName: Swift.String
+  @objc final public let userList: [Swift.String]
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrGroupUpdateOptions : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let groupId: Swift.String
+  @objc final public let groupName: Swift.String
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrGroupUserAddedEvent : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let groupId: Swift.String
+  @objc final public let userId: Swift.String
+  @objc final public let operatorUser: FcrCore.FcrUserInfo?
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrGroupUserMovedEvent : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let fromGroupId: Swift.String
+  @objc final public let toGroupId: Swift.String
+  @objc final public let userId: Swift.String
+  @objc final public let operatorUser: FcrCore.FcrUserInfo?
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrGroupUserRemovedEvent : ObjectiveC.NSObject {
+  @objc final public let groupId: Swift.String
+  @objc final public let userId: Swift.String
+  @objc final public let reason: FcrCore.FcrUserLeftReason
+  @objc final public let operatorUser: FcrCore.FcrUserInfo?
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrChatRoomSendBaseMessage : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrChatRoomSendTextMessage : FcrCore.FcrChatRoomSendBaseMessage {
+  @objc final public let content: Swift.String
+  @objc public init(content: Swift.String, properties: [Swift.String : Any]? = nil, to: [Swift.String]? = nil)
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrChatRoomSendImageMessage : FcrCore.FcrChatRoomSendBaseMessage {
+  @objc final public let data: Foundation.Data
+  @objc final public let width: Swift.UInt
+  @objc final public let height: Swift.UInt
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrChatRoomSendCustomMessage : FcrCore.FcrChatRoomSendBaseMessage {
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrChatRoomReceivedBaseMessage : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let id: Swift.String
+  @objc final public let from: FcrCore.FcrUserInfo
+  @objc final public let type: FcrCore.FcrChatRoomMessageType
+  @objc public var properties: [Swift.String : Any]?
+  @objc public var to: [Swift.String]?
+  @objc public var timestamp: Swift.UInt
+  @objc public var isPrivate: Swift.Bool
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrChatRoomReceivedTextMessage : FcrCore.FcrChatRoomReceivedBaseMessage {
+  @objc final public let content: Swift.String
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrChatRoomReceiveImageMessage : FcrCore.FcrChatRoomReceivedBaseMessage {
+  @objc final public let url: Swift.String
+  @objc final public let width: Swift.UInt
+  @objc final public let height: Swift.UInt
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrSecurityInfoUpdatedEvent : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let securityInfo: FcrCore.FcrSecurityInfo
+  @objc final public let operatorUser: FcrCore.FcrUserInfo?
+  @objc final public let cause: [Swift.String : Any]?
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrPermission : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let action: FcrCore.FcrPermissionAction
+  @objc final public let params: Any
+  @objc final public let targetRoles: FcrCore.FcrTargetRoleType
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrPermissionInfo : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let enable: Swift.Bool
+  @objc final public let info: FcrCore.FcrPermission?
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrPermissionInfoDeletedEvent : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let permissionInfo: [FcrCore.FcrPermissionInfo]
+  @objc final public let operatorUser: FcrCore.FcrUserInfo?
+  @objc final public let cause: [Swift.String : Any]?
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrPermissionInfoAddedEvent : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let permissionInfo: [FcrCore.FcrPermissionInfo]
+  @objc final public let operatorUser: FcrCore.FcrUserInfo?
+  @objc final public let cause: [Swift.String : Any]?
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrSecurity : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let action: FcrCore.FcrSecurityAction
+  @objc final public let targetRoles: FcrCore.FcrTargetRoleType
+  @objc final public let payload: [Swift.String : Any]
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class FcrSecurityInfo : ObjectiveC.NSObject, AgoraFoundation.AgoraSwiftObjectDescription {
+  @objc final public let enable: Swift.Bool
+  @objc final public let info: FcrCore.FcrSecurity
+  @objc deinit
+}
+public typealias FcrVideoEncoderConfig = AgoraRte.AgoraRteVideoEncoderConfig
+public typealias FcrVideoRenderConfig = AgoraRte.AgoraRteVideoRenderConfig
+public typealias FcrAudioRawData = AgoraRte.AgoraRteAudioRawData
+public typealias FcrScreenCaptureParams = AgoraRte.AgoraRteScreenCaptureParams
+public typealias FcrBeautyOptions = AgoraRte.AgoraRteBeautyOptions
+public typealias FcrVirtualBackgroundOptions = AgoraRte.AgoraRteVirtualBackgroundOptions
+public typealias FcrAudioEffectEnhancer = AgoraRte.AgoraRteAudioEffectEnhancer
+public typealias FcrVideoEffectEnhancer = AgoraRte.AgoraRteVideoEffectEnhancer
+public typealias FcrPerformanceInfo = AgoraRte.AgoraRtePerformanceInfo
+@objc public protocol FcrPeerSessionObserver : ObjectiveC.NSObjectProtocol {
+  @objc optional func onPeerSessionReceived(session: FcrCore.FcrPeerSession)
+  @objc optional func onPeerSessionAccepted(response: FcrCore.FcrSessionResponse)
+  @objc optional func onPeerSessionRejected(response: FcrCore.FcrSessionResponse)
+}
+@objc public protocol FcrPeerSessionControl : ObjectiveC.NSObjectProtocol {
+  @objc func startPeerSession(params: FcrCore.FcrPeerSessionParams, success: FcrCore.FcrCoreStringCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc @discardableResult
+  func stopPeerSession(sessionId: Swift.String) -> FcrCore.FcrError?
+  @objc func acceptPeerSession(session: FcrCore.FcrPeerSession, cause: [Swift.String : Any]?, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func rejectPeerSession(session: FcrCore.FcrPeerSession, cause: [Swift.String : Any]?, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func addObserver(observer: FcrCore.FcrPeerSessionObserver)
+  @objc func removeObserver(observer: FcrCore.FcrPeerSessionObserver)
+}
+@objc public protocol FcrPrivilegeObserver : ObjectiveC.NSObjectProtocol {
+  @objc optional func onSecurityInfoUpdated(roomId: Swift.String, event: FcrCore.FcrSecurityInfoUpdatedEvent)
+  @objc optional func onLocalUserPermissionAdded(roomId: Swift.String, event: FcrCore.FcrPermissionInfoAddedEvent)
+  @objc optional func onLocalUserPermissionDeleted(roomId: Swift.String, event: FcrCore.FcrPermissionInfoDeletedEvent)
+}
+@objc public protocol FcrPrivilegeControl : ObjectiveC.NSObjectProtocol {
+  @objc func addObserver(observer: FcrCore.FcrPrivilegeObserver)
+  @objc func removeObserver(observer: FcrCore.FcrPrivilegeObserver)
+  @objc func getSecurityInfo(action: FcrCore.FcrSecurityAction) -> FcrCore.FcrSecurityInfo?
+  @objc func getAllSecurityInfo() -> [FcrCore.FcrSecurityInfo]?
+  @objc func getAllLocalUserPermissionInfo() -> [FcrCore.FcrPermissionInfo]?
+  @objc func getLocalUserPermissionInfo(action: FcrCore.FcrPermissionAction) -> FcrCore.FcrPermissionInfo?
+  @objc func enableLockedRoom(enable: Swift.Bool, targetRoles: FcrCore.FcrTargetRoleType, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func allowShareScreen(enable: Swift.Bool, targetRoles: FcrCore.FcrTargetRoleType, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func allowShareBoard(enable: Swift.Bool, targetRoles: FcrCore.FcrTargetRoleType, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func allowWriteBoard(enable: Swift.Bool, targetRoles: FcrCore.FcrTargetRoleType, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func allowShare(enable: Swift.Bool, targetRoles: FcrCore.FcrTargetRoleType, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func allowSendChat(allow: Swift.Bool, targetRoles: FcrCore.FcrTargetRoleType, payload: [Swift.String : Any], success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func allowStartAudio(allow: Swift.Bool, targetRoles: FcrCore.FcrTargetRoleType, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func allowStartVideo(allow: Swift.Bool, targetRoles: FcrCore.FcrTargetRoleType, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func allowJoinWithMuteAudio(allow: Swift.Bool, targetRoles: FcrCore.FcrTargetRoleType, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+}
+@objc public protocol FcrRoomObserver : ObjectiveC.NSObjectProtocol {
+  @objc optional func onJoinRoomSuccess(roomId: Swift.String)
+  @objc optional func onJoinRoomFailure(roomId: Swift.String, error: FcrCore.FcrError)
+  @objc optional func onRoomMessageReceived(roomId: Swift.String, message: FcrCore.FcrMessage)
+  @objc optional func onRoomStateUpdated(roomId: Swift.String, state: FcrCore.FcrRoomState)
+  @objc optional func onCloudRecordingStateUpdated(roomId: Swift.String, state: FcrCore.FcrRecordingState)
+  @objc optional func onRoomPropertiesUpdated(roomId: Swift.String, event: FcrCore.FcrRoomPropertiesUpdatedEvent)
+  @objc optional func onRoomPropertiesDeleted(roomId: Swift.String, event: FcrCore.FcrRoomPropertiesDeletedEvent)
+  @objc optional func onNetworkQualityUpdated(roomId: Swift.String, event: FcrCore.FcrNetworkQualityEvent)
+  @objc optional func onNetworkStatsUpdated(roomId: Swift.String, stats: FcrCore.FcrNetworkStats)
+  @objc optional func onLiveStreamingUpdated(roomId: Swift.String, state: FcrCore.FcrLiveStreamingState)
+}
+@objc public protocol FcrRoomControl : ObjectiveC.NSObjectProtocol {
+  @objc func getPrivilegeControl() -> FcrCore.FcrPrivilegeControl?
+  @objc func getUserControl() -> FcrCore.FcrUserControl?
+  @objc func getStreamControl() -> FcrCore.FcrStreamControl?
+  @objc func getRoomSessionControl() -> FcrCore.FcrRoomSessionControl?
+  @objc func getChatRoomControl() -> FcrCore.FcrChatRoomControl?
+  @objc func getBoardRoomControl() -> FcrCore.FcrBoardRoomControl?
+  @objc func getRoomInfo() -> FcrCore.FcrRoomInfo?
+  @objc func getRoomSchedule() -> FcrCore.FcrRoomSchedule?
+  @objc func getSyncTimestamp() -> Swift.UInt64
+  @objc func join(options: FcrCore.FcrRoomJoinOptions, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func leave()
+  @objc func start(success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func end(success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func close(success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func getRoomState() -> FcrCore.FcrRoomState
+  @objc func getRoomProperties() -> [Swift.String : Any]?
+  @objc func getCloudRecordingState() -> FcrCore.FcrRecordingState
+  @objc func getRoomPropertiesByKeyPath(keyPath: Swift.String) -> Any?
+  @objc func updateRoomProperties(properties: [Swift.String : Any], cause: [Swift.String : Any]?, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func updateIncrementRoomProperties(increments: [Swift.String : Swift.Int], cause: [Swift.String : Any]?, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func deleteRoomProperties(keyPaths: [Swift.String], cause: [Swift.String : Any]?, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func startCloudRecording(config: FcrCore.FcrCloudRecordingConfig, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func pauseCloudRecording(success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func resumeCloudRecording(success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func stopCloudRecording(success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func getLiveStreamingState() -> FcrCore.FcrLiveStreamingState
+  @objc func getLiveStreamingConfig() -> FcrCore.FcrLiveStreamingConfig?
+  @objc func startLiveStreaming(config: FcrCore.FcrLiveStreamingConfig, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func stopLiveStreaming(success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func updateLiveStreamingLayout(layout: FcrCore.FcrLiveStreamingLayoutType, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func sendRoomMessage(payload: [Swift.String : Any], guaranteedDelivery: Swift.Bool, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func addObserver(observer: FcrCore.FcrRoomObserver)
+  @objc func removeObserver(observer: FcrCore.FcrRoomObserver)
+}
+@objc public protocol FcrMainRoomControl : FcrCore.FcrRoomControl {
+  @objc func getGroupControl() -> FcrCore.FcrGroupControl?
+}
+@objc public protocol FcrSubRoomControl : FcrCore.FcrRoomControl {
+}
+@objc public protocol FcrRoomSessionObserver : ObjectiveC.NSObjectProtocol {
+  @objc optional func onRoomSessionReceived(session: FcrCore.FcrRoomSession)
+  @objc optional func onRoomSessionAccepted(response: FcrCore.FcrSessionResponse)
+  @objc optional func onRoomSessionRejected(response: FcrCore.FcrSessionResponse)
+}
+@objc public protocol FcrRoomSessionControl : ObjectiveC.NSObjectProtocol {
+  @objc func startRoomSession(params: FcrCore.FcrRoomSessionParams, success: FcrCore.FcrCoreStringCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc @discardableResult
+  func stopRoomSession(sessionId: Swift.String) -> FcrCore.FcrError?
+  @objc func acceptRoomSession(session: FcrCore.FcrRoomSession, cause: [Swift.String : Any]?, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func rejectRoomSession(session: FcrCore.FcrRoomSession, cause: [Swift.String : Any]?, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func addObserver(observer: FcrCore.FcrRoomSessionObserver)
+  @objc func removeObserver(observer: FcrCore.FcrRoomSessionObserver)
+}
+@objc public protocol FcrAudioRawOutputDataObserver : ObjectiveC.NSObjectProtocol {
+  @objc optional func onAudioRawDataBeforeMixed(roomId: Swift.String, streamId: Swift.String, data: FcrCore.FcrAudioRawData)
+  @objc optional func onAudioRawDataMixed(roomId: Swift.String, data: FcrCore.FcrAudioRawData)
+}
+@objc public protocol FcrStreamObserver : ObjectiveC.NSObjectProtocol {
+  @objc optional func onStreamsAdded(roomId: Swift.String, events: [FcrCore.FcrStreamEvent])
+  @objc optional func onStreamsRemoved(roomId: Swift.String, events: [FcrCore.FcrStreamEvent])
+  @objc optional func onStreamsUpdated(roomId: Swift.String, events: [FcrCore.FcrStreamEvent])
+  @objc optional func onStreamVolumeIndicationUpdated(roomId: Swift.String, streamId: Swift.String, volume: Swift.UInt8)
+  @objc optional func onLocalStreamVideoStatsUpdated(roomId: Swift.String, streamId: Swift.String, stats: FcrCore.FcrLocalVideoStats)
+  @objc optional func onLocalStreamAudioStatsUpdated(roomId: Swift.String, streamId: Swift.String, stats: FcrCore.FcrLocalAudioStats)
+  @objc optional func onRemoteStreamVideoStatsUpdated(roomId: Swift.String, streamId: Swift.String, stats: FcrCore.FcrRemoteVideoStats)
+  @objc optional func onRemoteStreamAudioStatsUpdated(roomId: Swift.String, streamId: Swift.String, stats: FcrCore.FcrRemoteAudioStats)
+  @objc optional func onFirstRemoteVideoFrameRendered(roomId: Swift.String, streamId: Swift.String, dimensions: CoreGraphics.CGSize)
+}
+@objc public protocol FcrStreamControl : ObjectiveC.NSObjectProtocol {
+  @objc func getStreams() -> [Swift.String : [FcrCore.FcrStreamInfo]]?
+  @objc func getStreamList() -> [FcrCore.FcrStreamInfo]?
+  @objc func getStreamsByUserId(userId: Swift.String) -> [FcrCore.FcrStreamInfo]?
+  @objc func getStreamByStreamId(streamId: Swift.String) -> FcrCore.FcrStreamInfo?
+  @objc func addLocalStreams(configs: [FcrCore.FcrStreamCreateConfig], success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func updatePublishPrivilegeOfStreams(privileges: [Swift.String : FcrCore.FcrUpdateStreamPrivilege], success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func updatePublishPrivilegeOfStreams(privilege: FcrCore.FcrUpdateStreamPrivilege, scope: FcrCore.FcrUpdateStreamPrivilegeScope, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func removeStreams(streams: [Swift.String], success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func setVideoEncoderConfig(streamId: Swift.String, config: FcrCore.FcrVideoEncoderConfig, streamType: FcrCore.FcrVideoStreamType) -> FcrCore.FcrError?
+  @objc func startRenderRemoteVideoStream(streamId: Swift.String, config: FcrCore.FcrVideoRenderConfig, type: FcrCore.FcrVideoStreamType, view: UIKit.UIView) -> FcrCore.FcrError?
+  @objc func stopRenderRemoteVideoStream(streamId: Swift.String, view: UIKit.UIView) -> FcrCore.FcrError?
+  @objc func startPlayRemoteAudioStream(streamId: Swift.String) -> FcrCore.FcrError?
+  @objc func stopPlayRemoteAudioStream(streamId: Swift.String) -> FcrCore.FcrError?
+  @objc func takeSnapshot(streamId: Swift.String, filePath: Swift.String, success: FcrCore.FcrCoreSnapshotCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func addLocalScreenStream(config: FcrCore.FcrScreenStreamCreateConfig, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func removeScreenStream(success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func addObserver(observer: FcrCore.FcrStreamObserver)
+  @objc func removeObserver(observer: FcrCore.FcrStreamObserver)
+}
+@objc public protocol FcrUserObserver : ObjectiveC.NSObjectProtocol {
+  @objc optional func onRemoteUsersJoined(roomId: Swift.String, events: [FcrCore.FcrUserJoinedEvent])
+  @objc optional func onRemoteUsersLeft(roomId: Swift.String, events: [FcrCore.FcrUserLeftEvent])
+  @objc optional func onUserUpdated(roomId: Swift.String, event: FcrCore.FcrUserUpdatedEvent)
+  @objc optional func onAllUserCountUpdated(roomId: Swift.String, count: Swift.UInt32)
+  @objc optional func onUserPropertiesUpdated(roomId: Swift.String, event: FcrCore.FcrUserPropertiesUpdatedEvent)
+  @objc optional func onUserPropertiesDeleted(roomId: Swift.String, event: FcrCore.FcrUserPropertiesDeletedEvent)
+  @objc optional func onLocalUserKickedOut(roomId: Swift.String, event: FcrCore.FcrUserKickedOutEvent)
+}
+@objc public protocol FcrUserControl : ObjectiveC.NSObjectProtocol {
+  @objc func getLocalUser() -> FcrCore.FcrUserInfo
+  @objc func getUsers() -> [Swift.String : FcrCore.FcrUserInfo]
+  @objc func getUser(userId: Swift.String) -> FcrCore.FcrUserInfo?
+  @objc func getUserList() -> [FcrCore.FcrUserInfo]
+  @objc func getAllUserCount() -> Swift.UInt32
+  @objc func fetchUserList(params: FcrCore.FcrUserPageParams, success: @escaping FcrCore.FcrCoreUserPageCompletion, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func updateUserProperties(properties: [Swift.String : Any], cause: [Swift.String : Any]?, userId: Swift.String, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func updateIncrementUserProperties(increments: [Swift.String : Swift.Int], cause: [Swift.String : Any]?, userId: Swift.String, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func deleteUserProperties(keyPaths: [Swift.String], cause: [Swift.String : Any]?, userId: Swift.String, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func getUserProperties() -> [Swift.String : Any]?
+  @objc func getUserPropertiesByUserId(userId: Swift.String) -> [Swift.String : Any]?
+  @objc func getUserPropertiesByKeyPath(keyPath: Swift.String, userId: Swift.String) -> Any?
+  @objc func kickOut(userId: Swift.String, type: FcrCore.FcrUserKickedOutType, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func updateRemoteUser(userId: Swift.String, userRole: FcrCore.FcrUserRole, success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func revokeHost(success: FcrCore.FcrCoreSuccessCompletion?, failure: FcrCore.FcrCoreFailureCompletion?)
+  @objc func addObserver(observer: FcrCore.FcrUserObserver)
+  @objc func removeObserver(observer: FcrCore.FcrUserObserver)
+}
+extension FcrCore.FcrRoomState : Swift.Equatable {}
+extension FcrCore.FcrRoomState : Swift.Hashable {}
+extension FcrCore.FcrRoomState : Swift.RawRepresentable {}
+extension FcrCore.FcrRecordingState : Swift.Equatable {}
+extension FcrCore.FcrRecordingState : Swift.Hashable {}
+extension FcrCore.FcrRecordingState : Swift.RawRepresentable {}
+extension FcrCore.FcrCloudRecordingAudioProfile : Swift.Equatable {}
+extension FcrCore.FcrCloudRecordingAudioProfile : Swift.Hashable {}
+extension FcrCore.FcrCloudRecordingAudioProfile : Swift.RawRepresentable {}
+extension FcrCore.FcrLiveStreamingState : Swift.Equatable {}
+extension FcrCore.FcrLiveStreamingState : Swift.Hashable {}
+extension FcrCore.FcrLiveStreamingState : Swift.RawRepresentable {}
+extension FcrCore.FcrLiveStreamingLayoutType : Swift.Equatable {}
+extension FcrCore.FcrLiveStreamingLayoutType : Swift.Hashable {}
+extension FcrCore.FcrLiveStreamingLayoutType : Swift.RawRepresentable {}
+extension FcrCore.FcrUserKickedOutType : Swift.Equatable {}
+extension FcrCore.FcrUserKickedOutType : Swift.Hashable {}
+extension FcrCore.FcrUserKickedOutType : Swift.RawRepresentable {}
+extension FcrCore.FcrUserLeftReason : Swift.Equatable {}
+extension FcrCore.FcrUserLeftReason : Swift.Hashable {}
+extension FcrCore.FcrUserLeftReason : Swift.RawRepresentable {}
+extension FcrCore.FcrUserRole : Swift.Equatable {}
+extension FcrCore.FcrUserRole : Swift.Hashable {}
+extension FcrCore.FcrUserRole : Swift.RawRepresentable {}
+extension FcrCore.FcrChatRoomMessageType : Swift.Equatable {}
+extension FcrCore.FcrChatRoomMessageType : Swift.Hashable {}
+extension FcrCore.FcrChatRoomMessageType : Swift.RawRepresentable {}
+extension FcrCore.FcrDeviceType : Swift.Equatable {}
+extension FcrCore.FcrDeviceType : Swift.Hashable {}
+extension FcrCore.FcrDeviceType : Swift.RawRepresentable {}
+extension FcrCore.FcrPermissionAction : Swift.Equatable {}
+extension FcrCore.FcrPermissionAction : Swift.Hashable {}
+extension FcrCore.FcrPermissionAction : Swift.RawRepresentable {}
+extension FcrCore.FcrSecurityAction : Swift.Equatable {}
+extension FcrCore.FcrSecurityAction : Swift.Hashable {}
+extension FcrCore.FcrSecurityAction : Swift.RawRepresentable {}
+extension FcrCore.FcrBoardToolType : Swift.Equatable {}
+extension FcrCore.FcrBoardToolType : Swift.Hashable {}
+extension FcrCore.FcrBoardToolType : Swift.RawRepresentable {}
+extension FcrCore.FcrBoardInactiveReason : Swift.Equatable {}
+extension FcrCore.FcrBoardInactiveReason : Swift.Hashable {}
+extension FcrCore.FcrBoardInactiveReason : Swift.RawRepresentable {}

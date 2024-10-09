@@ -1,0 +1,42 @@
+platform :ios, '13.0'
+use_frameworks!
+
+target 'AgoraMeetingDemo' do
+    pod 'FcrUIScene', '3.1.0'
+    pod "AgoraRtm_OC_Special", '2.2.1.1'
+end
+
+
+pre_install do |installer|
+  # 移除重复导入的 aosl.xcframework
+  pods_root = installer.sandbox.root
+  duplicated_frameworks = Dir.glob("#{pods_root}/**/aosl.xcframework")
+
+  if duplicated_frameworks.size > 1
+    duplicated_frameworks.drop(1).each do |framework_path|
+      FileUtils.rm_rf(framework_path)
+    end
+  end
+end
+
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+
+      # 针对 Xcode 14 及以上版本，禁用对 Bundle 类型目标的签名，以避免构建错误
+      if target.respond_to?(:product_type) and target.product_type == "com.apple.product-type.bundle"
+        config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+      end
+
+      # 确保 iOS 部署版本至少为 11.0，以避免兼容性问题
+      deployment = config.build_settings['IPHONEOS_DEPLOYMENT_TARGET']
+      if deployment.to_f < 11.0
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
+      end
+
+      # 关闭 bitcode 支持
+      config.build_settings['ENABLE_BITCODE'] = 'NO'
+    end
+  end
+end

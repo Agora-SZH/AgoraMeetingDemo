@@ -1,0 +1,11 @@
+framework module FcrCore {
+  umbrella header "FcrCore-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module FcrCore.Swift {
+    header "FcrCore-Swift.h"
+    requires objc
+}

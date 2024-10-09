@@ -1,0 +1,11 @@
+framework module FcrUIScene {
+  umbrella header "FcrUIScene-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module FcrUIScene.Swift {
+    header "FcrUIScene-Swift.h"
+    requires objc
+}

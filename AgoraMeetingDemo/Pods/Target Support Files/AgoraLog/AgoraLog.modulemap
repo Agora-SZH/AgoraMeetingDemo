@@ -1,0 +1,6 @@
+framework module AgoraLog {
+  umbrella header "AgoraLog-umbrella.h"
+
+  export *
+  module * { export * }
+}

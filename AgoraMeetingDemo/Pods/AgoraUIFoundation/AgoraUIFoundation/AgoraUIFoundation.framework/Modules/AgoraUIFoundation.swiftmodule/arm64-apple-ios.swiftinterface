@@ -1,0 +1,415 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.6.1 (swiftlang-5.6.0.323.66 clang-1316.0.20.12)
+// swift-module-flags: -target arm64-apple-ios10.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name AgoraUIFoundation
+import AgoraFoundation
+@_exported import AgoraUIFoundation
+import Foundation
+import MapKit
+import Swift
+import UIKit
+import _Concurrency
+public struct AgoraAlertAction {
+  public init(title: Swift.String, titleColor: UIKit.UIColor? = nil, backgroundColor: UIKit.UIColor? = nil, callback: ((Swift.Int) -> Swift.Void)? = nil)
+}
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class AgoraAlert : UIKit.UIViewController, AgoraUIFoundation.AgoraUIContentContainer {
+  @_Concurrency.MainActor(unsafe) public var titleFont: UIKit.UIFont
+  @_Concurrency.MainActor(unsafe) public var contentFont: UIKit.UIFont
+  @_Concurrency.MainActor(unsafe) public var buttonFont: UIKit.UIFont
+  @_Concurrency.MainActor(unsafe) public var backgroundColor: UIKit.UIColor
+  @_Concurrency.MainActor(unsafe) public var lineColor: UIKit.UIColor
+  @_Concurrency.MainActor(unsafe) public var shadowColor: CoreGraphics.CGColor
+  @_Concurrency.MainActor(unsafe) public var titleColor: UIKit.UIColor
+  @_Concurrency.MainActor(unsafe) public var buttonColor: UIKit.UIColor
+  @_Concurrency.MainActor(unsafe) public var normalContentColor: UIKit.UIColor
+  @_Concurrency.MainActor(unsafe) public var selectedContentColor: UIKit.UIColor
+  @_Concurrency.MainActor(unsafe) public var buttonCornerRadius: CoreGraphics.CGFloat
+  @_Concurrency.MainActor(unsafe) public var buttonHeight: CoreGraphics.CGFloat
+  @_Concurrency.MainActor(unsafe) public var buttonDivideGap: CoreGraphics.CGFloat
+  @_Concurrency.MainActor(unsafe) public var buttonSideGap: CoreGraphics.CGFloat
+  @_Concurrency.MainActor(unsafe) public var buttonBottomGap: CoreGraphics.CGFloat
+  @_Concurrency.MainActor(unsafe) public var tableViewTopSpace: CoreGraphics.CGFloat
+  @_Concurrency.MainActor(unsafe) public var contentWidth: CoreGraphics.CGFloat
+  @_Concurrency.MainActor(unsafe) public var unselectedOptionImage: UIKit.UIImage?
+  @_Concurrency.MainActor(unsafe) public var selectedOptionImage: UIKit.UIImage?
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) public func show(title: Swift.String? = nil, contentList: [Swift.String], actions: [AgoraUIFoundation.AgoraAlertAction], in viewController: UIKit.UIViewController)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLayoutSubviews()
+  @_Concurrency.MainActor(unsafe) @objc public func initViews()
+  @_Concurrency.MainActor(unsafe) @objc public func initViewFrame()
+  @_Concurrency.MainActor(unsafe) @objc public func updateViewProperties()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+extension AgoraUIFoundation.AgoraAlert : UIKit.UITableViewDelegate, UIKit.UITableViewDataSource {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreGraphics.CGFloat
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class AgoraUILoading : UIKit.UIView {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func layoutSubviews()
+  @_Concurrency.MainActor(unsafe) public func setImageData(_ image: Foundation.Data)
+  @_Concurrency.MainActor(unsafe) public func setBackgroundColor(_ backgroundColor: UIKit.UIColor?)
+  @_Concurrency.MainActor(unsafe) public func setMessage(color: UIKit.UIColor, font: UIKit.UIFont)
+  @objc deinit
+}
+extension AgoraUIFoundation.AgoraUILoading : AgoraUIFoundation.AgoraUIContentContainer {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func initViews()
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func initViewFrame()
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func updateViewProperties()
+}
+public protocol AgoraPopoverDelegate : ObjectiveC.NSObjectProtocol {
+  func popoverDidDismiss(_ popover: AgoraUIFoundation.AgoraPopover)
+}
+public enum AgoraPopoverOption {
+  case arrowSize(CoreGraphics.CGSize)
+  case animationIn(Foundation.TimeInterval)
+  case animationOut(Foundation.TimeInterval)
+  case cornerRadius(CoreGraphics.CGFloat)
+  case sideEdge(CoreGraphics.CGFloat)
+  case blackOverlayColor(UIKit.UIColor)
+  case overlayBlur(UIKit.UIBlurEffect.Style)
+  case type(AgoraUIFoundation.AgoraPopoverArrowDirection)
+  case strokeColor(UIKit.UIColor)
+  case dismissOnBlackOverlayTap(Swift.Bool)
+  case showBlackOverlay(Swift.Bool)
+  case springDamping(CoreGraphics.CGFloat)
+  case initialSpringVelocity(CoreGraphics.CGFloat)
+  case arrowPointerOffset(CoreGraphics.CGPoint)
+}
+@objc public enum AgoraPopoverArrowDirection : Swift.Int {
+  case left
+  case right
+  case up
+  case down
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc @_Concurrency.MainActor(unsafe) open class AgoraPopover : UIKit.UIView {
+  @_Concurrency.MainActor(unsafe) weak open var delegate: AgoraUIFoundation.AgoraPopoverDelegate?
+  @_Concurrency.MainActor(unsafe) open var arrowSize: CoreGraphics.CGSize
+  @_Concurrency.MainActor(unsafe) open var animationIn: Swift.Double
+  @_Concurrency.MainActor(unsafe) open var animationOut: Swift.Double
+  @_Concurrency.MainActor(unsafe) open var popCornerRadius: CoreGraphics.CGFloat
+  @_Concurrency.MainActor(unsafe) open var sideEdge: CoreGraphics.CGFloat
+  @_Concurrency.MainActor(unsafe) open var arrowDirection: AgoraUIFoundation.AgoraPopoverArrowDirection
+  @_Concurrency.MainActor(unsafe) open var blackOverlayColor: UIKit.UIColor
+  @_Concurrency.MainActor(unsafe) open var overlayBlur: UIKit.UIBlurEffect?
+  @_Concurrency.MainActor(unsafe) open var strokeColor: UIKit.UIColor
+  @_Concurrency.MainActor(unsafe) open var borderColor: UIKit.UIColor
+  @_Concurrency.MainActor(unsafe) open var dismissOnBlackOverlayTap: Swift.Bool
+  @_Concurrency.MainActor(unsafe) open var showBlackOverlay: Swift.Bool
+  @_Concurrency.MainActor(unsafe) open var highlightFromView: Swift.Bool
+  @_Concurrency.MainActor(unsafe) open var highlightCornerRadius: CoreGraphics.CGFloat
+  @_Concurrency.MainActor(unsafe) open var springDamping: CoreGraphics.CGFloat
+  @_Concurrency.MainActor(unsafe) open var initialSpringVelocity: CoreGraphics.CGFloat
+  @_Concurrency.MainActor(unsafe) open var arrowPointerOffset: CoreGraphics.CGPoint
+  @_Concurrency.MainActor(unsafe) open var willShowHandler: (() -> ())?
+  @_Concurrency.MainActor(unsafe) open var willDismissHandler: (() -> ())?
+  @_Concurrency.MainActor(unsafe) open var didShowHandler: (() -> ())?
+  @_Concurrency.MainActor(unsafe) open var didDismissHandler: (() -> ())?
+  @_Concurrency.MainActor(unsafe) public var blackOverlay: UIKit.UIControl {
+    get
+  }
+  @objc dynamic public init()
+  @_Concurrency.MainActor(unsafe) public init(showHandler: (() -> ())?, dismissHandler: (() -> ())?)
+  @_Concurrency.MainActor(unsafe) public init(options: [AgoraUIFoundation.AgoraPopoverOption]?, showHandler: (() -> ())? = nil, dismissHandler: (() -> ())? = nil)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder aDecoder: Foundation.NSCoder)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func layoutSubviews()
+  @_Concurrency.MainActor(unsafe) open func showAsDialog(_ contentView: UIKit.UIView)
+  @_Concurrency.MainActor(unsafe) open func showAsDialog(_ contentView: UIKit.UIView, inView: UIKit.UIView)
+  @_Concurrency.MainActor(unsafe) open func show(_ contentView: UIKit.UIView, fromView: UIKit.UIView)
+  @_Concurrency.MainActor(unsafe) open func show(_ contentView: UIKit.UIView, fromView: UIKit.UIView, inView: UIKit.UIView)
+  @_Concurrency.MainActor(unsafe) open func show(_ contentView: UIKit.UIView, point: CoreGraphics.CGPoint)
+  @_Concurrency.MainActor(unsafe) open func show(_ contentView: UIKit.UIView, point: CoreGraphics.CGPoint, inView: UIKit.UIView)
+  @objc override dynamic open func accessibilityPerformEscape() -> Swift.Bool
+  @objc @_Concurrency.MainActor(unsafe) open func dismiss()
+  @objc @_Concurrency.MainActor(unsafe) open func dismissWithoutAnimation()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func draw(_ rect: CoreGraphics.CGRect)
+  @objc deinit
+}
+extension Swift.String {
+  public func agora_size(font: UIKit.UIFont, width: CoreGraphics.CGFloat = CGFloat(MAXFLOAT), height: CoreGraphics.CGFloat = CGFloat(MAXFLOAT)) -> CoreGraphics.CGSize
+  public static func agora_localized_string(_ key: Swift.String, object: ObjectiveC.NSObject, resource: Swift.String) -> Swift.String
+  public func agora_localized(_ bundle: Swift.String) -> Swift.String
+  public func agora_localized(_ class: Swift.AnyClass) -> Swift.String
+}
+@objc extension Foundation.NSString {
+  @objc dynamic public func agora_localized(_ bundle: Swift.String) -> Swift.String
+}
+extension UIKit.UIScreen {
+  @_Concurrency.MainActor(unsafe) public static var agora_width: CoreGraphics.CGFloat {
+    get
+  }
+  @_Concurrency.MainActor(unsafe) public static var agora_height: CoreGraphics.CGFloat {
+    get
+  }
+  @_Concurrency.MainActor(unsafe) public static var agora_is_notch: Swift.Bool {
+    get
+  }
+  @_Concurrency.MainActor(unsafe) public static var agora_safe_area_bottom: CoreGraphics.CGFloat {
+    get
+  }
+  @_Concurrency.MainActor(unsafe) public static var agora_safe_area_left: CoreGraphics.CGFloat {
+    get
+  }
+  @_Concurrency.MainActor(unsafe) public static var agora_safe_area_right: CoreGraphics.CGFloat {
+    get
+  }
+  @_Concurrency.MainActor(unsafe) public static var agora_safe_area_top: CoreGraphics.CGFloat {
+    get
+  }
+}
+extension UIKit.UIDeviceOrientation : AgoraFoundation.AgoraSwiftEnumDescription {
+  public var is_valid_agora_type: Swift.Bool {
+    get
+  }
+  public var agora_type: AgoraUIFoundation.AgoraUIOrientation {
+    get
+  }
+}
+extension Swift.Double {
+  public static let agora_animation: Swift.Double
+}
+extension Foundation.Bundle {
+  public static func agora_bundle(object: ObjectiveC.NSObject, resource: Swift.String) -> Foundation.Bundle?
+  public static func agora_bundle(_ name: Swift.String) -> Foundation.Bundle?
+  public static func agora_bundle(with class: Swift.AnyClass) -> Foundation.Bundle?
+}
+extension UIKit.UIImage {
+  public static func agora_bundle(object: ObjectiveC.NSObject, resource: Swift.String, name: Swift.String) -> UIKit.UIImage?
+  @objc public static func agora_image(_ name: Swift.String, in bundle: Swift.String) -> UIKit.UIImage?
+}
+extension UIKit.UIDevice {
+  @_Concurrency.MainActor(unsafe) public var agora_is_pad: Swift.Bool {
+    get
+  }
+  @_Concurrency.MainActor(unsafe) public var agora_is_chinese_language: Swift.Bool {
+    get
+  }
+  @_Concurrency.MainActor(unsafe) public var agora_is_traditional_chinese_language: Swift.Bool {
+    get
+  }
+  @_Concurrency.MainActor(unsafe) public var agora_owner: Swift.String {
+    get
+  }
+  @_Concurrency.MainActor(unsafe) public var agora_is_dark: Swift.Bool {
+    get
+  }
+}
+extension UIKit.UIViewController {
+  @objc @_Concurrency.MainActor(unsafe) public static func agora_top_view_controller() -> UIKit.UIViewController
+  @objc @_Concurrency.MainActor(unsafe) dynamic public func agora_dismiss(animated: Swift.Bool = true, completion: (() -> Swift.Void)? = nil)
+  @_Concurrency.MainActor(unsafe) public func agora_all_children_update_view_properties()
+  @_Concurrency.MainActor(unsafe) public func agora_present(_ viewController: UIKit.UIViewController, modalPresentationStyle: UIKit.UIModalPresentationStyle = .fullScreen, modalTransitionStyle: UIKit.UIModalTransitionStyle = .crossDissolve, animated: Swift.Bool = true, completion: (() -> Swift.Void)? = nil)
+}
+extension UIKit.UIImageView {
+  @_Concurrency.MainActor(unsafe) public func agora_set_image(_ image: UIKit.UIImage, with color: UIKit.UIColor? = nil)
+}
+extension UIKit.UIWindow {
+  @_Concurrency.MainActor(unsafe) public static func agora_top_window() -> UIKit.UIWindow
+}
+extension UIKit.UIView {
+  @_Concurrency.MainActor(unsafe) public func agora_all_sub_views_update_view_properties()
+}
+extension UIKit.UIColor {
+  public static func agora_create(red: Swift.Int, green: Swift.Int, blue: Swift.Int, transparency: CoreGraphics.CGFloat = 1) -> UIKit.UIColor?
+  public static func create(hexString: Swift.String, transparency: CoreGraphics.CGFloat = 1) -> UIKit.UIColor?
+  public static func create(hex: Swift.Int, transparency: CoreGraphics.CGFloat = 1) -> UIKit.UIColor?
+}
+@objc public protocol AgoraUIElement : ObjectiveC.NSObjectProtocol {
+  @objc var id: Swift.String { get set }
+}
+@objc public protocol AgoraUIActivity : ObjectiveC.NSObjectProtocol {
+  @objc func viewWillActive()
+  @objc func viewWillInactive()
+}
+@objc public protocol AgoraUIContentContainer : ObjectiveC.NSObjectProtocol {
+  @objc func initViews()
+  @objc func initViewFrame()
+  @objc func updateViewProperties()
+}
+@objc public enum AgoraUIOrientation : Swift.Int {
+  case portrait = 1
+  case portraitUpsideDown = 2
+  case landscapeLeft = 3
+  case landscapeRight = 4
+  public var isLandscape: Swift.Bool {
+    get
+  }
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public protocol AgoraUIViewOrientation : ObjectiveC.NSObjectProtocol {
+  @objc var orientation: AgoraUIFoundation.AgoraUIOrientation { get set }
+  @objc func onViewOrientationUpdated(_ orientation: AgoraUIFoundation.AgoraUIOrientation)
+}
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) open class AgoraUIToastTipsView : UIKit.UIView {
+  @objc @_Concurrency.MainActor(unsafe) public func stop()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(frame: CoreGraphics.CGRect)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+public enum AgoraUIToastPosition {
+  case top(CoreGraphics.CGFloat)
+  case middle
+  case bottom(CoreGraphics.CGFloat)
+}
+@objc @_Concurrency.MainActor(unsafe) open class AgoraUIToast : AgoraUIFoundation.AgoraPassthroughView, AgoraUIFoundation.AgoraUIViewOrientation {
+  @_Concurrency.MainActor(unsafe) @objc public var orientation: AgoraUIFoundation.AgoraUIOrientation
+  @_Concurrency.MainActor(unsafe) public var tipsViews: [AgoraUIFoundation.AgoraUIToastTipsView] {
+    get
+  }
+  @_Concurrency.MainActor(unsafe) public var toastPosition: AgoraUIFoundation.AgoraUIToastPosition
+  @_Concurrency.MainActor(unsafe) public var presentedTipsCount: Swift.UInt
+  @_Concurrency.MainActor(unsafe) public var tipsLineSpacing: CoreGraphics.CGFloat
+  @_Concurrency.MainActor(unsafe) public init(frame: CoreGraphics.CGRect, orientation: AgoraUIFoundation.AgoraUIOrientation = .portrait)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @_Concurrency.MainActor(unsafe) public func present(_ tipsView: AgoraUIFoundation.AgoraUIToastTipsView, duration: Foundation.TimeInterval)
+  @_Concurrency.MainActor(unsafe) @objc public func onViewOrientationUpdated(_ orientation: AgoraUIFoundation.AgoraUIOrientation)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) open class AgoraPassthroughView : UIKit.UIView {
+  public enum TestMode {
+    case list([UIKit.UIView])
+    case allSubview
+  }
+  @_Concurrency.MainActor(unsafe) public var testMode: AgoraUIFoundation.AgoraPassthroughView.TestMode
+  @_Concurrency.MainActor(unsafe) public init(testMode: AgoraUIFoundation.AgoraPassthroughView.TestMode)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(frame: CoreGraphics.CGRect)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func hitTest(_ point: CoreGraphics.CGPoint, with event: UIKit.UIEvent?) -> UIKit.UIView?
+  @objc deinit
+}
+public var Agora_Constraint_Id_X: Swift.String
+public var Agora_Constraint_Id_Y: Swift.String
+public var Agora_Constraint_Id_Center_X: Swift.String
+public var Agora_Constraint_Id_Center_Y: Swift.String
+public var Agora_Constraint_Id_Width: Swift.String
+public var Agora_Constraint_Id_Height: Swift.String
+public var Agora_Constraint_Id_Right: Swift.String
+public var Agora_Constraint_Id_Bottom: Swift.String
+public var Agora_Constraint_Id_Safe_X: Swift.String
+public var Agora_Constraint_Id_Safe_Y: Swift.String
+public var Agora_Constraint_Id_Safe_Right: Swift.String
+public var Agora_Constraint_Id_Safe_Bottom: Swift.String
+@objc extension UIKit.UIView {
+  @objc @_Concurrency.MainActor(unsafe) dynamic public var agora_x: CoreGraphics.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) dynamic public var agora_y: CoreGraphics.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) dynamic public var agora_z: Swift.Int {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) dynamic public var agora_safe_x: CoreGraphics.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) dynamic public var agora_safe_y: CoreGraphics.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) dynamic public var agora_safe_right: CoreGraphics.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) dynamic public var agora_safe_bottom: CoreGraphics.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) dynamic public var agora_width: CoreGraphics.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) dynamic public var agora_height: CoreGraphics.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) dynamic public var agora_center_x: CoreGraphics.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) dynamic public var agora_center_y: CoreGraphics.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) dynamic public var agora_right: CoreGraphics.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) dynamic public var agora_bottom: CoreGraphics.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) dynamic public var agora_pan_limit: CoreGraphics.CGRect {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) dynamic public var agora_is_draggable: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) dynamic public var agora_is_resizable: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) dynamic public var agora_id: Swift.Int {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) dynamic public var agora_visible: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) dynamic public var agora_enable: Swift.Bool {
+    @objc get
+    @objc set
+  }
+}
+@objc extension UIKit.UIView {
+  @objc @_Concurrency.MainActor(unsafe) dynamic public func agora_init_base_view()
+  @objc @_Concurrency.MainActor(unsafe) dynamic public func agora_has_transformed() -> Swift.Bool
+  @objc @_Concurrency.MainActor(unsafe) dynamic public func agora_reset_transform()
+  @objc @_Concurrency.MainActor(unsafe) dynamic public func agora_clear_constraint()
+  @discardableResult
+  @nonobjc @_Concurrency.MainActor(unsafe) public func agora_move(_ x: CoreGraphics.CGFloat, _ y: CoreGraphics.CGFloat) -> UIKit.UIView
+  @discardableResult
+  @nonobjc @_Concurrency.MainActor(unsafe) public func agora_resize(_ width: CoreGraphics.CGFloat, _ height: CoreGraphics.CGFloat) -> UIKit.UIView
+  @objc @discardableResult
+  @_Concurrency.MainActor(unsafe) dynamic public func agora_move(x: CoreGraphics.CGFloat, y: CoreGraphics.CGFloat) -> UIKit.UIView
+  @objc @discardableResult
+  @_Concurrency.MainActor(unsafe) dynamic public func agora_resize(width: CoreGraphics.CGFloat, height: CoreGraphics.CGFloat) -> UIKit.UIView
+  @objc @_Concurrency.MainActor(unsafe) dynamic public func agora_close()
+}
+extension UIKit.UIView {
+  @_Concurrency.MainActor(unsafe) public func agora_equal_to(view: UIKit.UIView, attribute: UIKit.NSLayoutConstraint.Attribute, constant: CoreGraphics.CGFloat = 0)
+  @_Concurrency.MainActor(unsafe) public func agora_equal_to_superView(attribute: UIKit.NSLayoutConstraint.Attribute, constant: CoreGraphics.CGFloat = 0)
+}
+@objc extension QuartzCore.CALayer {
+  @objc dynamic public var agora_visible: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc dynamic public var agora_enable: Swift.Bool {
+    @objc get
+    @objc set
+  }
+}
+extension AgoraUIFoundation.AgoraPopoverArrowDirection : Swift.Equatable {}
+extension AgoraUIFoundation.AgoraPopoverArrowDirection : Swift.Hashable {}
+extension AgoraUIFoundation.AgoraPopoverArrowDirection : Swift.RawRepresentable {}
+extension AgoraUIFoundation.AgoraUIOrientation : Swift.Equatable {}
+extension AgoraUIFoundation.AgoraUIOrientation : Swift.Hashable {}
+extension AgoraUIFoundation.AgoraUIOrientation : Swift.RawRepresentable {}

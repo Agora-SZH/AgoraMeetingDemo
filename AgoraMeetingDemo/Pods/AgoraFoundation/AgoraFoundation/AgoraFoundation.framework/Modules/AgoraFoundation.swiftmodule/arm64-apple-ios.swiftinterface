@@ -1,0 +1,425 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.6.1 (swiftlang-5.6.0.323.66 clang-1316.0.20.12)
+// swift-module-flags: -target arm64-apple-ios10.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name AgoraFoundation
+@_exported import AgoraFoundation
+import AgoraLog
+import CommonCrypto
+import Dispatch
+import Foundation
+import MobileCoreServices
+import Swift
+import SystemConfiguration
+import _Concurrency
+public typealias AgoraCompletion = () -> (Swift.Void)
+public typealias AgoraUIntCompletion = (Swift.UInt) -> (Swift.Void)
+public typealias AgoraErrorCompletion = (Swift.Error) -> (Swift.Void)
+public typealias AgoraErrorExCompletion = (AgoraFoundation.AgoraError) -> (Swift.Void)
+public typealias AgoraStringCompletion = (Swift.String) -> (Swift.Void)
+public typealias AgoraBoolCompletion = (Swift.Bool) -> (Swift.Void)
+public typealias AgoraDateCompletion = ((Foundation.Date) -> Swift.Void)
+public protocol AgoraCodable : Swift.Decodable, Swift.Encodable {
+}
+extension AgoraFoundation.AgoraCodable {
+  public static func agora_decode(from json: [Swift.String : Any]) throws -> Self
+  public func agora_convert<T>(value: Any, to type: T.Type) throws -> T
+}
+@objc public protocol AgoraObjectDescription : ObjectiveC.NSObjectProtocol {
+  @objc func agora_description() -> Swift.String
+}
+public protocol AgoraSwiftEnumDescription {
+  func agora_description() -> Swift.String
+}
+extension AgoraFoundation.AgoraSwiftEnumDescription {
+  public func agora_description() -> Swift.String
+}
+public protocol AgoraSwiftStructDescription {
+  func agora_description() -> Swift.String
+}
+extension AgoraFoundation.AgoraSwiftStructDescription {
+  public func agora_description() -> Swift.String
+}
+public protocol AgoraSwiftObjectDescription {
+  func agora_description() -> Swift.String
+}
+extension AgoraFoundation.AgoraSwiftObjectDescription {
+  public func agora_description() -> Swift.String
+}
+extension Swift.Array : AgoraFoundation.AgoraSwiftObjectDescription {
+  public func agora_description() -> Swift.String
+}
+extension Swift.Dictionary : AgoraFoundation.AgoraSwiftObjectDescription where Key == Swift.String {
+  public func agora_description() -> Swift.String
+}
+public func agora_get_description(with value: Any?) -> Swift.String
+extension Swift.Dictionary where Key == Swift.String, Value == Any {
+  public func agora_get_value_by_key<T>(_ key: Swift.String, type: T.Type) throws -> T
+  public func agora_get_value_by_key_path<T>(_ path: Swift.String, type: T.Type) throws -> T
+  public func agora_get_value_by_key_path<T>(_ path: Swift.String, enumType: T.Type) throws -> T where T : Swift.RawRepresentable, T.RawValue == Swift.Int
+  public func agora_keys() -> [Swift.String]
+  public func agora_json_string() -> Swift.String?
+}
+@objc extension Foundation.NSDictionary {
+  @objc dynamic public func agora_json_string() -> Swift.String?
+  @objc dynamic public func agora_json_deep_copy() -> Foundation.NSDictionary?
+  @objc dynamic public func agora_copying_deep_copy() -> Foundation.NSDictionary?
+  @objc dynamic public func agora_get_object_deep_copy(_ keyPath: Swift.String) -> Any?
+  @objc dynamic public func agora_get_object_by_key_path(_ path: Swift.String) -> Any?
+}
+@objc extension Foundation.NSMutableDictionary {
+  @objc dynamic public func agora_get_object_by_key(_ key: Swift.String, createDictionaryPath: Swift.Bool) -> Any?
+  @objc dynamic public func agora_get_object_by_key(_ key: Swift.String, createArrayPath: Swift.Bool) -> Any?
+  @objc dynamic public func agora_update_key_path(with properties: [Swift.String : Any])
+  @objc dynamic public func agora_delete(with keyPaths: [Swift.String])
+}
+@objc public enum AgoraDomainNamePoolRegion : Swift.Int {
+  case CN = 0
+  case NA = 1
+  case EU = 2
+  case AP = 3
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+extension AgoraFoundation.AgoraDomainNamePoolRegion : Swift.CaseIterable {
+  public typealias AllCases = [AgoraFoundation.AgoraDomainNamePoolRegion]
+  public static var allCases: [AgoraFoundation.AgoraDomainNamePoolRegion] {
+    get
+  }
+}
+@objc public enum AgoraDomainNamePoolEnvironment : Swift.Int {
+  case test = 0
+  case dev = 1
+  case pre = 2
+  case pro = 3
+  case pri = 4
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+extension AgoraFoundation.AgoraDomainNamePoolEnvironment : Swift.CaseIterable {
+  public typealias AllCases = [AgoraFoundation.AgoraDomainNamePoolEnvironment]
+  public static var allCases: [AgoraFoundation.AgoraDomainNamePoolEnvironment] {
+    get
+  }
+}
+@objc public class AgoraDomainNamePool : ObjectiveC.NSObject {
+  @objc public init(region: AgoraFoundation.AgoraDomainNamePoolRegion)
+  @discardableResult
+  @objc public func next() -> Swift.Bool
+  @objc public func getHost() -> Swift.String
+  @objc public func getProHost() -> Swift.String
+  @objc public func setParameter(value: AgoraFoundation.AgoraDomainNamePoolEnvironment)
+  @objc public func setRegion(_ value: AgoraFoundation.AgoraDomainNamePoolRegion)
+  @objc public func setList(list: [Swift.String])
+  @objc deinit
+}
+extension AgoraFoundation.AgoraDomainNamePoolRegion {
+  public var stringValue: Swift.String {
+    get
+  }
+}
+@objc open class AgoraError : Foundation.NSError {
+  final public let message: Swift.String
+  @objc public init(code: Swift.Int, message: Swift.String)
+  @objc public static func create(error: Swift.Error) -> AgoraFoundation.AgoraError
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc public static func create(serviceCode: Swift.Int, service: Swift.String, moduleCode: Swift.Int, detailCode: Swift.Int, info: Swift.String, extra: [Swift.String : Any]? = nil) -> AgoraFoundation.AgoraError
+  @objc public static func createServiceNumber(serviceCode: Swift.Int) -> Swift.Int
+  @objc public static func createModuleNumber(moduleCode: Swift.Int) -> Swift.Int
+  @objc public static func createMessage(service: Swift.String, info: Swift.String, extra: [Swift.String : Any]?) -> Swift.String
+  @objc override dynamic public var localizedDescription: Swift.String {
+    @objc get
+  }
+  @objc deinit
+}
+public func agora_value_transform<T>(value: Any, type: T.Type) throws -> T
+public func agora_value_transform<T>(enumValue: Any, type: T.Type) throws -> T where T : Swift.RawRepresentable, T.RawValue == Swift.Int
+extension Swift.Double {
+  public var agora_int_value: Swift.Int64 {
+    get
+  }
+}
+extension Foundation.Date {
+  public enum Range : Swift.String {
+    case hour
+    case minute
+    case second
+    case milliSecond
+    public init?(rawValue: Swift.String)
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  public func agora_string(with range: [Foundation.Date.Range], separator: Swift.String? = nil) -> Swift.String
+  public func agora_millisecond() -> Foundation.TimeInterval
+}
+@objc extension Foundation.NSDate {
+  @objc dynamic public func agora_millisecond() -> Foundation.TimeInterval
+}
+@objc extension Foundation.NSError {
+  @objc convenience dynamic public init(domain: Swift.String = #function, code: Swift.Int, message: Swift.String)
+}
+@objc extension Foundation.NSArray {
+  @objc dynamic public func agora_deep_copy() -> Foundation.NSArray?
+}
+@objc extension Foundation.NSPointerArray {
+  @objc @discardableResult
+  dynamic public func agora_add_object(_ object: ObjectiveC.NSObject) -> Swift.Bool
+  @objc dynamic public func agora_get_object_index(_ object: ObjectiveC.NSObject) -> Swift.Int
+  @objc @discardableResult
+  dynamic public func agora_remove_object(_ object: ObjectiveC.NSObject) -> Swift.Bool
+}
+extension Swift.String {
+  public func agora_append_path(_ path: Swift.String) -> Swift.String
+  public func agora_md5() -> Swift.String
+  public func agora_json_string() throws -> Swift.String?
+  public func agora_json_object() throws -> [Swift.String : Any]?
+  public func agora_address() -> Swift.UnsafeMutableRawPointer
+  public func agora_url_encoding() -> Swift.String?
+  public func agora_base64_encoded() -> Swift.String?
+}
+@objc extension Foundation.NSString {
+  @objc dynamic public func agora_md5() -> Foundation.NSString
+  @objc dynamic public func agora_json_string() -> Foundation.NSString?
+  @objc dynamic public func agora_json_object() -> [Swift.String : Any]?
+  @objc dynamic public func agora_deepy_copy() -> Foundation.NSString
+}
+@objc extension Foundation.Bundle {
+  @objc dynamic public func agora_get_version() -> Swift.String
+  @objc dynamic public func agora_get_name() -> Swift.String
+}
+@objc public enum AgoraLogTag : Swift.Int {
+  case apiCall, apiReturn, apiCallback, other
+  public func getDescription() -> Swift.String
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc @_inheritsConvenienceInitializers open class AgoraApiLogCollection : AgoraFoundation.AgoraLogCollection {
+  @objc public func log(type: AgoraLog.AgoraLogType, tag: AgoraFoundation.AgoraLogTag, parameters: Swift.String?, startTime: Foundation.TimeInterval, message: Swift.String?, extra: Swift.String?, from: Swift.AnyClass, method: Swift.String, line: Swift.Int)
+  @objc override public init(logId: Swift.String, logFolderPath: Swift.String, filePrefix: Swift.String, maximumNumberOfFiles: Swift.Int)
+  @objc deinit
+}
+@objc open class AgoraLogCollection : ObjectiveC.NSObject {
+  @objc public init(logId: Swift.String, logFolderPath: Swift.String, filePrefix: Swift.String, maximumNumberOfFiles: Swift.Int)
+  @objc public func printOnConsole(_ isPrint: Swift.Bool)
+  @objc public func log(content: Swift.String, extra: Swift.String? = nil, type: AgoraLog.AgoraLogType, from: Swift.AnyClass? = nil, method: Swift.String? = nil, line: Swift.Int = 0)
+  @objc deinit
+}
+public func agora_debug_print(_ content: Swift.String)
+public typealias AgoraObserverCompletion = ((ObjectiveC.NSObject) -> Swift.Void)
+@_inheritsConvenienceInitializers @objc public class AgoraObserverCenter : ObjectiveC.NSObject {
+  @objc public var count: Swift.Int {
+    @objc get
+  }
+  @discardableResult
+  @objc public func addObject(_ object: ObjectiveC.NSObject) -> Swift.Bool
+  @discardableResult
+  @objc public func removeObject(_ object: ObjectiveC.NSObject) -> Swift.Bool
+  @objc public func traverseObserver(with queue: Dispatch.DispatchQueue, operation: @escaping AgoraFoundation.AgoraObserverCompletion)
+  @objc public func traverseObserver(operation: @escaping AgoraFoundation.AgoraObserverCompletion)
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class AgoraRetryHelper : ObjectiveC.NSObject {
+  @objc public var count: Swift.UInt {
+    get
+  }
+  @objc @discardableResult
+  public func work(backoff: Swift.Bool, retryCount: Swift.UInt, retryQueue: Dispatch.DispatchQueue, retryAction: @escaping AgoraFoundation.AgoraUIntCompletion, finalSuccess: @escaping AgoraFoundation.AgoraCompletion, finalFailure: @escaping AgoraFoundation.AgoraErrorCompletion) -> Swift.Bool
+  @objc public func retry(error: Swift.Error)
+  @objc public func cancel()
+  @objc public func done()
+  @objc public func cancel(with error: Swift.Error)
+  @objc override dynamic public init()
+  @objc deinit
+}
+public typealias onNextClosure<Element> = ((Element) throws -> Swift.Void)
+@objc @_inheritsConvenienceInitializers final public class AgoraRxBag : ObjectiveC.NSObject {
+  @objc deinit
+  @objc override dynamic public init()
+}
+@_hasMissingDesignatedInitializers final public class AgoraRxObserver<Element> : ObjectiveC.NSObject {
+  final public func disposed(by bag: AgoraFoundation.AgoraRxBag)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers public class AgoraRxObservable<Element> : ObjectiveC.NSObject {
+  public func subscribe(onNext: @escaping AgoraFoundation.onNextClosure<Element>) -> AgoraFoundation.AgoraRxObserver<Element>
+  public func bind(to observable: AgoraFoundation.AgoraRxObservable<Element>) -> AgoraFoundation.AgoraRxObserver<Element>
+  @objc override dynamic public init()
+  @objc deinit
+}
+@_inheritsConvenienceInitializers final public class AgoraRxPublish<Element> : AgoraFoundation.AgoraRxObservable<Element> {
+  final public func accept(value: Element) throws
+  @objc override dynamic public init()
+  @objc deinit
+}
+final public class AgoraRxBehavior<Element> : AgoraFoundation.AgoraRxObservable<Element> {
+  final public var value: Element {
+    get
+  }
+  public init(value: Element)
+  final public func next(value: Element) throws
+  override final public func bind(to observable: AgoraFoundation.AgoraRxObservable<Element>) -> AgoraFoundation.AgoraRxObserver<Element>
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class AgoraScheduleTool : ObjectiveC.NSObject {
+  public var isStarted: Swift.Bool {
+    get
+  }
+  final public let outAction: AgoraFoundation.AgoraRxPublish<Swift.Void>
+  @objc override dynamic public init()
+  public func start(timeInterval: Foundation.TimeInterval, fireInstantly: Swift.Bool = false)
+  public func stop()
+  @objc deinit
+}
+public typealias ArDataExCompletion = ((Foundation.Data) throws -> Swift.Void)
+public typealias ArJsonExCompletion = (([Swift.String : Any]) throws -> Swift.Void)
+public typealias ArExCompletion = (() throws -> Swift.Void)
+public typealias ArDataCompletion = ((Foundation.Data) -> Swift.Void)
+public typealias ArJsonCompletion = (([Swift.String : Any]) -> Swift.Void)
+public typealias ArCompletion = (() -> Swift.Void)
+public typealias ArErrorRetryCompletion = (Swift.Error) -> (Swift.Bool)
+public typealias ArErrorCompletion = (Swift.Error) -> (Swift.Void)
+public enum ArSuccessCompletion {
+  case json(AgoraFoundation.ArJsonExCompletion), data(AgoraFoundation.ArDataExCompletion), void(AgoraFoundation.ArExCompletion)
+}
+public enum ArRequestTimeout {
+  case low, medium, high, custom(Foundation.TimeInterval)
+  public var value: Foundation.TimeInterval {
+    get
+  }
+}
+@objc public enum ArHttpMethod : Swift.Int {
+  case options
+  case get
+  case head
+  case post
+  case put
+  case patch
+  case delete
+  case trace
+  case connect
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@_inheritsConvenienceInitializers @objc public class ArError : Foundation.NSError {
+  @objc override dynamic public init(domain: Swift.String, code: Swift.Int, userInfo dict: [Swift.String : Any]? = nil)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@objc public protocol ArLogTube : ObjectiveC.NSObjectProtocol {
+  @objc func onLog(info: Swift.String, extra: [Swift.String : Any]?)
+  @objc func onLog(warning: Swift.String, extra: [Swift.String : Any]?)
+  @objc func onLog(error: Swift.Error, extra: [Swift.String : Any]?)
+}
+@objc public protocol ArminClientDelegate : ObjectiveC.NSObjectProtocol {
+  @objc func onRequestedFailure(error: Swift.Error)
+}
+@objc open class ArminClient : ObjectiveC.NSObject {
+  @objc final public let localErrorCode: Swift.Int
+  weak public var logTube: AgoraFoundation.ArLogTube?
+  weak public var delegate: AgoraFoundation.ArminClientDelegate?
+  @objc public init(logTube: AgoraFoundation.ArLogTube? = nil)
+  @objc public func objc_request(url: Swift.String, headers: [Swift.String : Swift.String]?, parameters: [Swift.String : Any]?, method: AgoraFoundation.ArHttpMethod, event: Swift.String, timeout: Foundation.TimeInterval, responseQueue: Dispatch.DispatchQueue, retryCount: Swift.Int, jsonSuccess: AgoraFoundation.ArJsonCompletion?, failure: AgoraFoundation.ArErrorCompletion?, cancelRetry: AgoraFoundation.ArErrorRetryCompletion?)
+  @objc public func objc_request(url: Swift.String, headers: [Swift.String : Swift.String]?, parameters: [Swift.String : Any]?, method: AgoraFoundation.ArHttpMethod, event: Swift.String, timeout: Foundation.TimeInterval, responseQueue: Dispatch.DispatchQueue, retryCount: Swift.Int, dataSuccess: AgoraFoundation.ArDataCompletion?, failure: AgoraFoundation.ArErrorCompletion?, cancelRetry: AgoraFoundation.ArErrorRetryCompletion?)
+  @objc public func objc_request(url: Swift.String, headers: [Swift.String : Swift.String]?, parameters: [Swift.String : Any]?, method: AgoraFoundation.ArHttpMethod, event: Swift.String, timeout: Foundation.TimeInterval, responseQueue: Dispatch.DispatchQueue, retryCount: Swift.Int, success: AgoraFoundation.ArCompletion?, failure: AgoraFoundation.ArErrorCompletion?, cancelRetry: AgoraFoundation.ArErrorRetryCompletion?)
+  public func request(url: Swift.String, headers: [Swift.String : Swift.String]? = nil, parameters: [Swift.String : Any]? = nil, method: AgoraFoundation.ArHttpMethod, event: Swift.String, timeout: AgoraFoundation.ArRequestTimeout = .medium, responseQueue: Dispatch.DispatchQueue = .main, retryCount: Swift.Int = 0, success: AgoraFoundation.ArSuccessCompletion? = nil, failure: AgoraFoundation.ArErrorCompletion? = nil, cancelRetry: AgoraFoundation.ArErrorRetryCompletion? = nil)
+  @objc public func objc_upload(fileURL: Foundation.URL, to url: Swift.String, headers: [Swift.String : Swift.String]?, method: AgoraFoundation.ArHttpMethod, event: Swift.String, timeout: Foundation.TimeInterval, responseQueue: Dispatch.DispatchQueue, retryCount: Swift.Int, jsonSuccess: AgoraFoundation.ArJsonCompletion?, failure: AgoraFoundation.ArErrorCompletion?, cancelRetry: AgoraFoundation.ArErrorRetryCompletion?)
+  @objc public func objc_upload(fileURL: Foundation.URL, to url: Swift.String, headers: [Swift.String : Swift.String]?, method: AgoraFoundation.ArHttpMethod, event: Swift.String, timeout: Foundation.TimeInterval, responseQueue: Dispatch.DispatchQueue, retryCount: Swift.Int, dataSuccess: AgoraFoundation.ArDataCompletion?, failure: AgoraFoundation.ArErrorCompletion?, cancelRetry: AgoraFoundation.ArErrorRetryCompletion?)
+  @objc public func objc_upload(fileURL: Foundation.URL, to url: Swift.String, headers: [Swift.String : Swift.String]?, method: AgoraFoundation.ArHttpMethod, event: Swift.String, timeout: Foundation.TimeInterval, responseQueue: Dispatch.DispatchQueue, retryCount: Swift.Int, success: AgoraFoundation.ArCompletion?, failure: AgoraFoundation.ArErrorCompletion?, cancelRetry: AgoraFoundation.ArErrorRetryCompletion?)
+  public func upload(fileURL: Foundation.URL, to url: Swift.String, headers: [Swift.String : Swift.String]? = nil, method: AgoraFoundation.ArHttpMethod, event: Swift.String, timeout: AgoraFoundation.ArRequestTimeout = .medium, responseQueue: Dispatch.DispatchQueue = .main, retryCount: Swift.Int = 0, success: AgoraFoundation.ArSuccessCompletion? = nil, failure: AgoraFoundation.ArErrorCompletion? = nil, cancelRetry: AgoraFoundation.ArErrorRetryCompletion? = nil)
+  @objc public func objc_download(url: Swift.String, headers: [Swift.String : Swift.String]?, method: AgoraFoundation.ArHttpMethod, event: Swift.String, timeout: Foundation.TimeInterval, responseQueue: Dispatch.DispatchQueue, retryCount: Swift.Int, jsonSuccess: AgoraFoundation.ArJsonCompletion?, failure: AgoraFoundation.ArErrorCompletion?, cancelRetry: AgoraFoundation.ArErrorRetryCompletion?, toFileUrl: Foundation.URL)
+  @objc public func objc_download(url: Swift.String, headers: [Swift.String : Swift.String]?, method: AgoraFoundation.ArHttpMethod, event: Swift.String, timeout: Foundation.TimeInterval, responseQueue: Dispatch.DispatchQueue, retryCount: Swift.Int, dataSuccess: AgoraFoundation.ArDataCompletion?, failure: AgoraFoundation.ArErrorCompletion?, cancelRetry: AgoraFoundation.ArErrorRetryCompletion?, toFileUrl: Foundation.URL)
+  @objc public func objc_download(url: Swift.String, headers: [Swift.String : Swift.String]?, method: AgoraFoundation.ArHttpMethod, event: Swift.String, timeout: Foundation.TimeInterval, responseQueue: Dispatch.DispatchQueue, retryCount: Swift.Int, success: AgoraFoundation.ArCompletion?, failure: AgoraFoundation.ArErrorCompletion?, cancelRetry: AgoraFoundation.ArErrorRetryCompletion?, toFileUrl: Foundation.URL)
+  public func download(from url: Swift.String, toFileUrl: Foundation.URL, headers: [Swift.String : Swift.String]? = nil, method: AgoraFoundation.ArHttpMethod, event: Swift.String, timeout: AgoraFoundation.ArRequestTimeout = .medium, responseQueue: Dispatch.DispatchQueue = .main, retryCount: Swift.Int = 0, success: AgoraFoundation.ArSuccessCompletion? = nil, failure: AgoraFoundation.ArErrorCompletion? = nil, cancelRetry: AgoraFoundation.ArErrorRetryCompletion? = nil)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers open class NetworkReachabilityManager {
+  public enum NetworkReachabilityStatus {
+    case unknown
+    case notReachable
+    case reachable(AgoraFoundation.NetworkReachabilityManager.ConnectionType)
+  }
+  public enum ConnectionType {
+    case ethernetOrWiFi
+    case wwan
+    public static func == (a: AgoraFoundation.NetworkReachabilityManager.ConnectionType, b: AgoraFoundation.NetworkReachabilityManager.ConnectionType) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public typealias Listener = (AgoraFoundation.NetworkReachabilityManager.NetworkReachabilityStatus) -> Swift.Void
+  open var isReachable: Swift.Bool {
+    get
+  }
+  open var isReachableOnWWAN: Swift.Bool {
+    get
+  }
+  open var isReachableOnEthernetOrWiFi: Swift.Bool {
+    get
+  }
+  open var networkReachabilityStatus: AgoraFoundation.NetworkReachabilityManager.NetworkReachabilityStatus {
+    get
+  }
+  open var listenerQueue: Dispatch.DispatchQueue
+  open var listener: AgoraFoundation.NetworkReachabilityManager.Listener?
+  open var flags: SystemConfiguration.SCNetworkReachabilityFlags? {
+    get
+  }
+  open var previousFlags: SystemConfiguration.SCNetworkReachabilityFlags
+  convenience public init?(host: Swift.String)
+  convenience public init?()
+  @objc deinit
+  @discardableResult
+  open func startListening() -> Swift.Bool
+  open func stopListening()
+}
+extension AgoraFoundation.NetworkReachabilityManager.NetworkReachabilityStatus : Swift.Equatable {
+}
+public func == (lhs: AgoraFoundation.NetworkReachabilityManager.NetworkReachabilityStatus, rhs: AgoraFoundation.NetworkReachabilityManager.NetworkReachabilityStatus) -> Swift.Bool
+open class ServerTrustPolicyManager {
+  final public let policies: [Swift.String : AgoraFoundation.ServerTrustPolicy]
+  public init(policies: [Swift.String : AgoraFoundation.ServerTrustPolicy])
+  open func serverTrustPolicy(forHost host: Swift.String) -> AgoraFoundation.ServerTrustPolicy?
+  @objc deinit
+}
+public enum ServerTrustPolicy {
+  case performDefaultEvaluation(validateHost: Swift.Bool)
+  case performRevokedEvaluation(validateHost: Swift.Bool, revocationFlags: CoreFoundation.CFOptionFlags)
+  case pinCertificates(certificates: [Security.SecCertificate], validateCertificateChain: Swift.Bool, validateHost: Swift.Bool)
+  case pinPublicKeys(publicKeys: [Security.SecKey], validateCertificateChain: Swift.Bool, validateHost: Swift.Bool)
+  case disableEvaluation
+  case customEvaluation((_ serverTrust: Security.SecTrust, _ host: Swift.String) -> Swift.Bool)
+  public static func certificates(in bundle: Foundation.Bundle = Bundle.main) -> [Security.SecCertificate]
+  public static func publicKeys(in bundle: Foundation.Bundle = Bundle.main) -> [Security.SecKey]
+  public func evaluate(_ serverTrust: Security.SecTrust, forHost host: Swift.String) -> Swift.Bool
+}
+extension AgoraFoundation.AgoraDomainNamePoolRegion : Swift.Equatable {}
+extension AgoraFoundation.AgoraDomainNamePoolRegion : Swift.Hashable {}
+extension AgoraFoundation.AgoraDomainNamePoolRegion : Swift.RawRepresentable {}
+extension AgoraFoundation.AgoraDomainNamePoolEnvironment : Swift.Equatable {}
+extension AgoraFoundation.AgoraDomainNamePoolEnvironment : Swift.Hashable {}
+extension AgoraFoundation.AgoraDomainNamePoolEnvironment : Swift.RawRepresentable {}
+extension Foundation.Date.Range : Swift.Equatable {}
+extension Foundation.Date.Range : Swift.Hashable {}
+extension Foundation.Date.Range : Swift.RawRepresentable {}
+extension AgoraFoundation.AgoraLogTag : Swift.Equatable {}
+extension AgoraFoundation.AgoraLogTag : Swift.Hashable {}
+extension AgoraFoundation.AgoraLogTag : Swift.RawRepresentable {}
+extension AgoraFoundation.ArHttpMethod : Swift.Equatable {}
+extension AgoraFoundation.ArHttpMethod : Swift.Hashable {}
+extension AgoraFoundation.ArHttpMethod : Swift.RawRepresentable {}
+extension AgoraFoundation.NetworkReachabilityManager.ConnectionType : Swift.Equatable {}
+extension AgoraFoundation.NetworkReachabilityManager.ConnectionType : Swift.Hashable {}

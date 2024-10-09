@@ -1,0 +1,3 @@
+${PODS_ROOT}/Target Support Files/AgoraRtm_OC_Special/AgoraRtm_OC_Special-xcframeworks.sh
+${PODS_ROOT}/AgoraRtm_OC_Special/AgoraRtmKit.xcframework
+${PODS_ROOT}/AgoraRtm_OC_Special/aosl.xcframework

@@ -1,0 +1,11 @@
+framework module AgoraFoundation {
+  umbrella header "AgoraFoundation-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module AgoraFoundation.Swift {
+    header "AgoraFoundation-Swift.h"
+    requires objc
+}

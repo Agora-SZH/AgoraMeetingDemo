@@ -1,0 +1,90 @@
+PODS:
+  - AgoraFoundation (1.0.0):
+    - AgoraLog (~> 1.0.2)
+  - AgoraLog (1.0.2):
+    - CocoaLumberjack (~> 3.6.1)
+  - AgoraRtcEngine_iOS/ClearVision (4.3.2)
+  - AgoraRtcEngine_iOS/ReplayKit (4.3.2)
+  - AgoraRtcEngine_iOS/RtcBasic (4.3.2)
+  - AgoraRtcEngine_iOS/VirtualBackground (4.3.2)
+  - AgoraRte (3.1.0):
+    - AgoraFoundation (~> 1.0.0)
+    - AgoraRtcEngine_iOS/ClearVision (~> 4.3.2)
+    - AgoraRtcEngine_iOS/ReplayKit (~> 4.3.2)
+    - AgoraRtcEngine_iOS/RtcBasic (~> 4.3.2)
+    - AgoraRtcEngine_iOS/VirtualBackground (~> 4.3.2)
+    - SSZipArchive
+    - YYModel
+  - AgoraRtm_OC_Special (2.2.1.1)
+  - AgoraUIFoundation (1.0.0):
+    - AgoraFoundation (~> 1.0.0)
+  - CocoaLumberjack (3.6.2):
+    - CocoaLumberjack/Core (= 3.6.2)
+  - CocoaLumberjack/Core (3.6.2)
+  - FcrCore (3.1.0):
+    - AgoraFoundation (~> 1.0.0)
+    - AgoraRte (~> 3.1.0)
+    - HyphenateChat (~> 4.2.0)
+    - Whiteboard (~> 2.16.99)
+  - FcrUIScene (3.1.0):
+    - AgoraUIFoundation (~> 1.0.0)
+    - FcrCore (~> 3.1.0)
+    - Masonry
+  - HyphenateChat (4.2.0)
+  - Masonry (1.1.0)
+  - NTLBridge (3.1.6)
+  - SSZipArchive (2.4.3)
+  - White_YYModel (1.0.6)
+  - Whiteboard (2.16.104):
+    - Whiteboard/Whiteboard-Basic (= 2.16.104)
+  - Whiteboard/Resource (2.16.104)
+  - Whiteboard/Whiteboard-Basic (2.16.104):
+    - NTLBridge (~> 3.1.4)
+    - White_YYModel
+    - Whiteboard/Resource
+  - YYModel (1.0.4)
+
+DEPENDENCIES:
+  - AgoraRtm_OC_Special (= 2.2.1.1)
+  - FcrUIScene (= 3.1.0)
+
+SPEC REPOS:
+  trunk:
+    - AgoraFoundation
+    - AgoraLog
+    - AgoraRtcEngine_iOS
+    - AgoraRte
+    - AgoraRtm_OC_Special
+    - AgoraUIFoundation
+    - CocoaLumberjack
+    - FcrCore
+    - FcrUIScene
+    - HyphenateChat
+    - Masonry
+    - NTLBridge
+    - SSZipArchive
+    - White_YYModel
+    - Whiteboard
+    - YYModel
+
+SPEC CHECKSUMS:
+  AgoraFoundation: bb32687b8e6d8fddc3a5614e704b395540b9b4a7
+  AgoraLog: b0eb6ed816b29e411dc14dc2171fe5912a8a141f
+  AgoraRtcEngine_iOS: eaa97751fcfe1b50d9b067e0df92752a6a5f899f
+  AgoraRte: 5447b611203ae73a72aec185a80a9d3f5225654e
+  AgoraRtm_OC_Special: 4a31a9ad717084de4e62c26cd7d925a28f21dcc3
+  AgoraUIFoundation: 5c4d6936cd0895d332df8d5acecef7de504259e1
+  CocoaLumberjack: bd155f2dd06c0e0b03f876f7a3ee55693122ec94
+  FcrCore: 1d63a61f4ea83da4e78e42215eccd9ade1e2cb31
+  FcrUIScene: 10358fa05d803e240cf79c6f43d1e135a518957c
+  HyphenateChat: e43d1ec9ccf404eeb2ee7d3265cd12a4e83f0d3a
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  NTLBridge: 6ef7f3c1fc956f2e2d701a89828d51674bd479c7
+  SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
+  White_YYModel: 4ed7b231471784ec709d4db954e1ca61a4fbe54d
+  Whiteboard: fb4fa71c6592b5ce527c159e7ff4f03ada4d1c37
+  YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
+
+PODFILE CHECKSUM: 4fe8e4eab7fdcbba265f94140fd5b0434fdeba70
+
+COCOAPODS: 1.11.3

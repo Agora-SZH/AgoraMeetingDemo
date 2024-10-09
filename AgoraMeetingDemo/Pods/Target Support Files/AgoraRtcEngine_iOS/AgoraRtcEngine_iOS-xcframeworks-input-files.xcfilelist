@@ -1,0 +1,8 @@
+${PODS_ROOT}/Target Support Files/AgoraRtcEngine_iOS/AgoraRtcEngine_iOS-xcframeworks.sh
+${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraClearVisionExtension.xcframework
+${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraReplayKitExtension.xcframework
+${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraRtcKit.xcframework
+${PODS_ROOT}/AgoraRtcEngine_iOS/Agorafdkaac.xcframework
+${PODS_ROOT}/AgoraRtcEngine_iOS/Agoraffmpeg.xcframework
+${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraSoundTouch.xcframework
+${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraVideoSegmentationExtension.xcframework

@@ -1,0 +1,2 @@
+${PODS_XCFRAMEWORKS_BUILD_DIR}/AgoraRtm_OC_Special/AgoraRtmKit.framework
+${PODS_XCFRAMEWORKS_BUILD_DIR}/AgoraRtm_OC_Special/aosl.framework
